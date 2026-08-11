@@ -1,0 +1,317 @@
+AI-Powered Quantum Circuit Optimization Advisor
+An Intelligent Framework for Performance Analysis and Optimization
+Rishitha C - CB.AI.U4AID24109
+Karthikeya Y - CB.AI.U4AID24163
+Ashwin Tyagi - CB.AI.U4AID24167
+Kaushal S - CB.AI.U4AID24168
+Department of Artificial Intelligence and Data Science
+Amrita Vishwa Vidyapeetham
+July 16, 2026
+Rishitha C - CB.AI.U4AID24109 Karthikeya Y - CB.AI.U4AID24163 Ashwin Tyagi - CB.AI.U4AID24167 Kaushal S - CB.AI.U4AID24168
+( Department of Artificial Intell
+AI-Powered Quantum Circuit Optimization Advisor An Intelligent Framework for Performan
+July 16, 2026
+1 / 10
+Problem Statement
+Quantum computing has emerged as a promising technology for solving complex
+computational problems beyond the capability of classical computers. However, current Noisy
+Intermediate-Scale Quantum (NISQ) devices suffer from hardware limitations such as noise,
+decoherence, limited qubit connectivity, and gate errors.
+Developers often rely on repeated executions and manual experimentation to evaluate circuit
+performance and identify optimization opportunities.
+Research Problem
+There is no integrated AI-driven framework capable of automatically analyzing quantum
+circuits, predicting their execution performance, and recommending optimization strategies
+before execution.
+Rishitha C - CB.AI.U4AID24109 Karthikeya Y - CB.AI.U4AID24163 Ashwin Tyagi - CB.AI.U4AID24167 Kaushal S - CB.AI.U4AID24168
+( Department of Artificial Intell
+AI-Powered Quantum Circuit Optimization Advisor An Intelligent Framework for Performan
+July 16, 2026
+2 / 10
+Literature Review
+Year
+Paper
+Contribution
+Research Gap
+2025
+A Comprehensive Review of
+Quantum Circuit Optimization:
+Current Trends and Future Di-
+rections
+Summarized analytical, heuristic,
+compiler-based and AI-driven
+optimization approaches.
+Identified the absence of unified
+AI-based optimization advisory
+systems.
+2025
+Benchmarking the Performance
+of Quantum Computing Software
+Compared Qiskit, TKET, Cirq
+and Amazon Braket for com-
+pilation quality and execution
+efficiency.
+No predictive model for circuit
+performance.
+2025
+OrQstrator: An AI-Powered
+Framework for Advanced Quan-
+tum Circuit Optimization
+Proposed reinforcement learning
+based hardware-aware quantum
+circuit optimization.
+Does not integrate benchmark
+dataset generation and interactive
+decision support.
+2024
+Quantum Artificial Intelligence:
+A Brief Survey
+Reviewed AI applications in quan-
+tum computing including circuit
+optimization, transpilation and
+benchmarking.
+Did not develop an end-to-end
+intelligent optimization advisor.
+2023
+Machine Learning Techniques for
+Quantum Circuit Optimization
+Applied machine learning meth-
+ods to improve quantum circuit
+optimization and reduce execution
+overhead.
+Focused primarily on optimiza-
+tion; no intelligent recommenda-
+tion framework.
+Rishitha C - CB.AI.U4AID24109 Karthikeya Y - CB.AI.U4AID24163 Ashwin Tyagi - CB.AI.U4AID24167 Kaushal S - CB.AI.U4AID24168
+( Department of Artificial Intell
+AI-Powered Quantum Circuit Optimization Advisor An Intelligent Framework for Performan
+July 16, 2026
+3 / 10
+Literature Review
+Year
+Paper
+Contribution
+Research Gap
+2022
+Quantum Circuit Optimization
+and Transpilation via Parameter-
+ized Circuit Instantiation
+Reduced gate count and improved
+transpilation quality using param-
+eterized optimization.
+Did not employ machine learning
+for execution performance predic-
+tion.
+2022
+Synthesizing Quantum-Circuit
+Optimizers (QUESO)
+Automatically generated opti-
+mization rewrite rules for quan-
+tum circuits.
+Focused only on compiler opti-
+mization without hardware perfor-
+mance analysis.
+2021
+Survey on Quantum Circuit
+Compilation for NISQ Comput-
+ers: Artificial Intelligence to
+Heuristics
+Comprehensively reviewed heuris-
+tic, compiler-based and AI-driven
+quantum circuit compilation tech-
+niques.
+Survey paper only; no integrated
+prediction or recommendation
+framework.
+2019
+Quantum Circuit Optimizations
+for NISQ Architectures
+Presented connectivity-aware
+circuit optimization techniques to
+reduce SWAP gates and improve
+hardware mapping.
+Focused only on routing and
+mapping without intelligent opti-
+mization.
+2018
+Quantum Computing in the
+NISQ Era and Beyond
+Introduced the concept of Noisy
+Intermediate-Scale Quantum
+(NISQ) computing and high-
+lighted the need for efficient
+quantum circuit optimization.
+Did not propose AI-based opti-
+mization or performance predic-
+tion techniques.
+Rishitha C - CB.AI.U4AID24109 Karthikeya Y - CB.AI.U4AID24163 Ashwin Tyagi - CB.AI.U4AID24167 Kaushal S - CB.AI.U4AID24168
+( Department of Artificial Intell
+AI-Powered Quantum Circuit Optimization Advisor An Intelligent Framework for Performan
+July 16, 2026
+4 / 10
+Research Gaps Identified
+Based on the literature survey, the following research gaps are identified:
+Existing approaches mainly focus on circuit compilation or transpilation.
+Very few studies predict circuit execution performance before execution.
+Optimization techniques are mostly heuristic or compiler-based rather than AI-driven.
+Current solutions do not simultaneously analyze circuit features, hardware characteristics,
+and execution metrics.
+No unified framework integrates performance prediction, optimization recommendation,
+benchmarking, and visualization.
+Limited benchmark datasets are available for training Machine Learning models on
+quantum circuit optimization.
+Rishitha C - CB.AI.U4AID24109 Karthikeya Y - CB.AI.U4AID24163 Ashwin Tyagi - CB.AI.U4AID24167 Kaushal S - CB.AI.U4AID24168
+( Department of Artificial Intell
+AI-Powered Quantum Circuit Optimization Advisor An Intelligent Framework for Performan
+July 16, 2026
+5 / 10
+Objectives
+1 Generate benchmark quantum circuits using Qiskit.
+2 Extract structural and execution-related circuit features.
+3 Develop an automated benchmark dataset.
+4 Train Machine Learning models for circuit performance prediction.
+5 Recommend optimal circuit optimization strategies.
+6 Build an interactive dashboard for visualization and decision support.
+Rishitha C - CB.AI.U4AID24109 Karthikeya Y - CB.AI.U4AID24163 Ashwin Tyagi - CB.AI.U4AID24167 Kaushal S - CB.AI.U4AID24168
+( Department of Artificial Intell
+AI-Powered Quantum Circuit Optimization Advisor An Intelligent Framework for Performan
+July 16, 2026
+6 / 10
+Proposed Framework
+Quantum Circuit Generation
+(Qiskit)
+Circuit Feature Extraction
+Execution Benchmarking
+Benchmark Dataset Generation
+Machine Learning Model Training
+Performance Prediction
+Optimization Recommendation
+Streamlit Dashboard
+Visualization & Report Generation
+Rishitha C - CB.AI.U4AID24109 Karthikeya Y - CB.AI.U4AID24163 Ashwin Tyagi - CB.AI.U4AID24167 Kaushal S - CB.AI.U4AID24168
+( Department of Artificial Intell
+AI-Powered Quantum Circuit Optimization Advisor An Intelligent Framework for Performan
+July 16, 2026
+7 / 10
+Proposed Dataset
+ID
+Algorithm
+Qubits
+Depth
+Width
+Gates
+CX
+H
+Measure
+1
+Grover
+6
+84
+6
+118
+28
+12
+6
+2
+QFT
+8
+126
+8
+165
+42
+16
+8
+3
+VQE
+4
+62
+4
+79
+18
+8
+4
+4
+QAOA
+6
+97
+6
+132
+31
+10
+6
+Execution Parameters
+Backend
+Opt. Level
+Noise
+Shots
+Runtime(s)
+Fidelity
+Success
+AerSimulator
+2
+Medium
+1024
+0.043
+98.2%
+96.8%
+IBM Brisbane
+3
+High
+2048
+0.086
+95.1%
+92.4%
+Dataset Attributes
+Circuit Features
+Execution Parameters
+Hardware Characteristics
+Performance Metrics
+Target Variable: Circuit Performance Score
+Rishitha C - CB.AI.U4AID24109 Karthikeya Y - CB.AI.U4AID24163 Ashwin Tyagi - CB.AI.U4AID24167 Kaushal S - CB.AI.U4AID24168
+( Department of Artificial Intell
+AI-Powered Quantum Circuit Optimization Advisor An Intelligent Framework for Performan
+July 16, 2026
+8 / 10
+Project Timeline
+Activity
+0th Review
+1st Review
+Final Review
+Problem Identification
+✓
+Literature Survey
+✓
+Research Gap Analysis
+✓
+Objectives Formulation
+✓
+Framework Design
+✓
+✓
+Benchmark Dataset Generation
+✓
+Machine Learning Model Development
+✓
+Performance Prediction
+✓
+✓
+Optimization Recommendation Engine
+✓
+✓
+Dashboard Development
+✓
+✓
+Testing and Validation
+✓
+Rishitha C - CB.AI.U4AID24109 Karthikeya Y - CB.AI.U4AID24163 Ashwin Tyagi - CB.AI.U4AID24167 Kaushal S - CB.AI.U4AID24168
+( Department of Artificial Intell
+AI-Powered Quantum Circuit Optimization Advisor An Intelligent Framework for Performan
+July 16, 2026
+9 / 10
+Thank You
+Questions?
+Rishitha C - CB.AI.U4AID24109 Karthikeya Y - CB.AI.U4AID24163 Ashwin Tyagi - CB.AI.U4AID24167 Kaushal S - CB.AI.U4AID24168
+( Department of Artificial Intell
+AI-Powered Quantum Circuit Optimization Advisor An Intelligent Framework for Performan
+July 16, 2026
+10 / 10

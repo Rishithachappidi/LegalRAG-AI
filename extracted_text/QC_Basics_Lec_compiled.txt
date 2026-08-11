@@ -1,0 +1,269 @@
+Quantum mechanics
+• Physics before the 20th century: Newtonian mechanics, 
+Maxwell’s laws of electromagnetism theory, wave theory of 
+light ― Classical Physics
+• Beginning of 20th century, the experimental findings of a 
+number of scientific discoveries could not find theoretical 
+explanation from classical mechanics ― Quantum Physics 
+was born
+“ 
+Quantum” 
+means 
+“discrete” 
+― 
+existence 
+as 
+individual lumps, Not continuous  
+Quantum 
+Physics/Mechanics 
+Definition: 
+Branch 
+of 
+physics that deals with the behaviour of matter at the 
+microscopic (atomic) level
+“ Classical Mechanics is infact an approximation of 
+quantum mechanics “
+5
+Gustav Kirchhoff (1860). 
+black-body radiation
+Perfect black body :              
+A body that absorbs the entire 
+radiation incident on it.
+The light emitted by a 
+black body is called 
+black-body radiation
+6
+black-body radiation
+At room temperature, black bodies emit IR light, 
+Blue shift of emission peak with increasing temperature
+Distribution of radiant energy as a function of 
+wavelength for different T
+Stefan Boltzmann law
+E = σ T4
+Josef Stefan(1879)  e Ludwig Boltzmann (1884)
+Wilhelm Wien(1893)
+Lord Rayleigh y James Jeans
+Wien’s displacement law
+λmax = 2.8978 x 10 -3/ T  mK
+Rayleigh-Jeans law 
+         E(ν) = 
+𝟖𝝅𝝑𝟐𝒌𝑻
+𝒄𝟑
+• Ultraviolet catastrophe
+E(ν)= 
+8𝜋ℎ𝜗3
+𝑐3 [ 
+1
+𝑒ℎ𝜗/𝐾𝑇−1]
+Planck’s radiations law
+Max Planck (1901)
+Göttingen
+Energy absorbed in quanta
+Photoelectric effect
+Heinrich Hertz 
+(1897)
+• Photocurrent vs Intensity
+• Photocurrent vs plate potential ( for different radiation 
+intensities)
+• Photocurrent vs plate potential (for different frequency of 
+radiation)
+Einstein’s theory of photoelectric effect
+Albert Einstein 
+(1905)
+De Broglie  Hypothesis
+# Supporting Arguments:
+✓
+Nature loves symmetry
+✓
+Explained the postulate of quantization of angular 
+momentum in Bohr’s atomic model
+# Experimental Proof for De Broglie Hypothesis ( Electron 
+Diffraction)
+✓ Experiment by G.P Thomson  (1927)
+Davisson and Thomson jointly awarded Nobel Prize in 1937
+#   The Uncertainty Principle    
+Discovered by Heisenberg in 1927,        
+He was awarded Nobel Prize in 1932.
+Heisenberg Uncertainty principle
+• ΔxΔp ≥ ħ/2- Both position and momentum cannot be 
+determined simultaneously
+• ΔEΔt ≥ ħ/2; Both energy of a state and the lifetime of 
+the state cannot be measured simultaneously
+Schrodinger Wave equation
+• Time-dependent –expression
+• Time-independent – expression
+❑Ψ in itself has no physical significance and cannot be measured 
+directly, can be complex (having real and imaginary parts).
+❑Ψ (Probability Amplitude) is related to the probability of a 
+finding a particle as a function of x and t.
+❑Probability density ǀψǀ2 = ψψ*
+Physical Interpretation of Schrodinger’s wave equation 
+❑Eligibility criteria of a function to be ψ (Acceptable 
+wavefunctions) :
+✓Should be normalizable.
+✓should be well-behaved: 
+ Ψ, derivatives and 2nd derivatives of Ψ must be Finite , 
+continuous  and single-valued everywhere 
+Only wavefunctions with certain properties yield physically 
+meaningfull results when used in calculations. So, only Well-
+behaved 
+and 
+Normalizable 
+functions 
+are 
+admissible 
+for 
+representation of real bodies.
+Physical Interpretation of Schrodinger’s wave equation 
+Classical vs Quantum
+• Valid for macro regime
+• Straight forward, has  
+causality
+• Particle  is a point mass, 
+motion described by 
+trajectories
+• State of an object described 
+by exact numbers called 
+dynamic variables
+• All quantities are allowed to 
+be continuous, particle can 
+have any energy
+• Valid for microscopic 
+regime
+• Causality is lost
+• Wave-particle duality
+• We talk only in 
+probabilities of state
+• Concept   of 
+quantization
+World’s first portable quantum computer, the 
+Gemini Mini, from SpinQ Technology was unveiled 
+in 2022
+❖Integrated display touch 
+screen
+❖18 in-built algorithms to set 
+up a problem
+❖Weighs 14 kg and requires 
+just 60 watts of power to run.
+Why Quantum? Why Now?
+• Limitations of classical computing (Moore’s Law 
+saturation)
+• Quantum technologies emerging across domains: 
+sensing, materials, cryptography
+Does not move things, it moves information
+Platforms that guarantee the properties of 
+superposition and entanglement
+•
+A quantum state is a mathematical description of a 
+quantum system, like a particle, that contains all the 
+information about its properties.
+•
+It determines the probabilities of different outcomes when 
+a measurement is performed and describes the system's 
+potential behaviors
+Computational Basis
+The state of a qubit is given by :  
+Prove that: 
+Bloch Sphere Representation of a Qubit
+Bloch Sphere Mapping
+Bloch Sphere Representation of a Qubit
+Bloch Sphere Mapping
+Recap of Classical Bits 
+• A classical bit: 0 or 1
+• Digital logic gates: AND, OR, NOT
+• Deterministic computation
+Visualizing Quantum Logic Gates - Bloch Sphere
+Operators are functions that act on state vectors (or "kets") of 
+a quantum system to produce a new state vector. They map a 
+state from one state space to another. 
+❑Quantum gates are defined as unitary operators that 
+manipulate the states of qubits
+Pauli’s X,Y,Z Gate and the Hadamard Gate
+Quantum circuits 
+A quantum circuit is a model for quantum computation that 
+uses a sequence of quantum gates and measurements to 
+perform calculations on qubits
+Classical digital Circuit Vs Quantum Circuit 
+A quantum algorithm is a step-by-step procedure for 
+solving a problem on a quantum computer that leverages 
+quantum mechanics principles like superposition and 
+entanglement to perform calculations
+Quantum Algorithms
+Constant means that the function only outputs the 
+values of 0 or 1.
+Balanced refers to a behaviour where the output will 
+be half 0 and a half 1
+Reversibility of Quantum Oracles and Gates
+All quantum gates and oracles must be reversible !
+Why Reversibility is Necessary ?
+•
+In quantum mechanics, the evolution of a 
+closed system over time is described by unitary 
+operations (unitary matrices are reversible
+•
+Conservation 
+of 
+Information:
+Reversible 
+operations 
+preserve 
+all 
+information; 
+no 
+information is lost.
+Reversibility of Quantum Oracles
+All quantum gates and oracles must be reversible !
+Why Reversibility is Necessary ?
+•
+Any 
+irreversible 
+process 
+constitutes 
+a 
+measurement, which collapses the wave 
+function and destroys
+superposition and 
+entanglement
+•
+Reversible computation, in principle, can be 
+performed with zero energy dissipation -  
+major benefit for future high-speed, low-power 
+technologies
+Ancilla or Helper Qubit
+Reversibility in Quantum Oracles is achieved by adding an 
+auxiliary (ancilla) qubit to store the output without 
+overwriting the input:
+Not reversible
+- OR Gate
+Reversibility in Quantum Oracles is achieved by adding an 
+auxiliary (ancilla) qubit to store the output without 
+overwriting the input:
+Ancilla or Helper Qubit
+A Single Qubit Quantum Oracle
+A Single Qubit Phase Oracle
+Qubit initialization
+❑Process of preparing a qubit in a specific, well-defined 
+state, most commonly the |0⟩ state, before running a 
+quantum algorithm
+❑Various methods depending on the hardware platform – 
+example: cooling the system to its lowest energy state to 
+prepare |0⟩, or applying microwave or laser pulses to 
+prepare |1⟩ by flipping |0⟩
+Initialization is a crucial first step for any quantum 
+algorithm, as the results depend entirely on the initial 
+state of the qubits.
+Deutsche Algorithm 
+Deutsche Algorithm 
+Deutsche Algorithm 
+0
+1
+Deutsche Algorithm 
+Multi Qubit Systems
+•
+A multi-qubit system is a collection of multiple qubits, 
+treated as a single system.
+•
+To obtain Computational Basis States for a multi qubit 
+system - perform outer product or tensor products of 
+individual basis states.
+For a 2-qubit system:

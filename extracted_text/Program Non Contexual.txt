@@ -1,0 +1,152 @@
+Non Contexual Image segmentation
+In [1]:
+#!pip install opencv-python
+In [1]:
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+def threshold_segmentation():
+    # Load the image in grayscale
+    img = cv2.imread('cameraman.png', 0)
+    if img is None:
+        print('could not able to run image')
+        return
+    # --- Display the original image ---
+    plt.figure(figsize=(18, 12)) # 18*12 inches
+    plt.subplot(2, 3, 1) # Using a 2x4 grid for better layout
+    plt.imshow(img, cmap='gray') # cmap-colormap, enusres the pictures diaplayed in sh
+    plt.title('Original Grayscale Image')
+    plt.axis('off')
+    # --- 1. Simple Global Thresholding (Binary) ---
+    # Pixels above 127 become white (255), otherwise black (0)
+    ret, thresh_binary = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)
+    plt.subplot(2, 3, 2)
+    plt.imshow(thresh_binary, cmap='gray')
+    plt.title('Binary Threshold (127)')
+    plt.axis('off')
+    # --- 2. Simple Global Thresholding (Binary Inverse) ---
+    # Pixels below 127 become white (255), otherwise black (0)
+    ret, thresh_binary_inv = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY_INV)
+    plt.subplot(2, 3, 3)
+    plt.imshow(thresh_binary_inv, cmap='gray')
+    plt.title('Binary Inverse Threshold (127)')
+    plt.axis('off')
+    # --- 3. Otsu's Binarization ---
+    # Automatically determines the optimal threshold value from the image histogram
+    ret_otsu, otsu_thresh = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_
+    plt.subplot(2, 3, 4)
+    plt.imshow(otsu_thresh, cmap='gray')
+    plt.title(f"Otsu's Threshold (Optimal: {ret_otsu})")
+    plt.axis('off')
+  
+    # --- 6. Truncated Threshold ---
+    # Pixels above threshold set to threshold value (127), others unchanged
+    ret, thresh_trunc = cv2.threshold(img, 127, 255, cv2.THRESH_TRUNC)
+    plt.subplot(2, 3, 5)
+    plt.imshow(thresh_trunc, cmap='gray')
+    plt.title('Truncated Threshold (127)')
+    plt.axis('off')
+6/29/26, 1:21 PM
+1. Non Contexual
+localhost:8888/nbconvert/html/2025-26 odd Semester/2025-26 odd semester/S5Computer vision23AID301/Programs/PythonPrograms/1. Non Contex…
+1/4
+Color image thresholding
+    # --- 7. To Zero Threshold ---
+    # Pixels above threshold unchanged, others set to 0
+    ret, thresh_tozero = cv2.threshold(img, 127, 255, cv2.THRESH_TOZERO)
+    plt.subplot(2, 3, 6)
+    plt.imshow(thresh_tozero, cmap='gray')
+    plt.title('To Zero Threshold (127)')
+    plt.axis('off')
+    plt.tight_layout()
+    plt.show()
+    
+threshold_segmentation()
+In [30]:
+#color image
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+# Load the color image
+#img_color = cv2.imread('apple.jpeg', 1)
+img_color = cv2.imread('lena.png', 1)
+#img_color = cv2.imread('lena.png', cv2.IMREAD_COLOR)
+# Convert BGR to RGB for Matplotlib display
+img_rgb = cv2.cvtColor(img_color, cv2.COLOR_BGR2RGB)
+# Split into B, G, R channels for channel-wise thresholding
+b, g, r = cv2.split(img_color) # SPLIT COLOR CHANNELS
+6/29/26, 1:21 PM
+1. Non Contexual
+localhost:8888/nbconvert/html/2025-26 odd Semester/2025-26 odd semester/S5Computer vision23AID301/Programs/PythonPrograms/1. Non Contex…
+2/4
+# Initialize figure for displaying results
+plt.figure(figsize=(18, 12))
+# --- Display the original color image ---
+plt.subplot(2, 3, 1)
+plt.imshow(img_rgb)
+plt.title('Original Color Image')
+plt.axis('off')
+# --- 1. Simple Global Thresholding (Binary) ---
+# Apply binary thresholding to each channel
+ret,thresh_b = cv2.threshold(b, 127, 255, cv2.THRESH_BINARY)
+ret,thresh_g = cv2.threshold(g, 127, 255, cv2.THRESH_BINARY)
+ret,thresh_r = cv2.threshold(r, 127, 255, cv2.THRESH_BINARY)
+binary_color = cv2.merge([thresh_b, thresh_g, thresh_r])# merge all channels
+binary_rgb = cv2.cvtColor(binary_color, cv2.COLOR_BGR2RGB)
+plt.subplot(2, 3, 2)
+plt.imshow(binary_rgb)
+plt.title('Binary Threshold (127)')
+plt.axis('off')
+# --- 2. Simple Global Thresholding (Binary Inverse) ---
+ret,thresh_b_inv = cv2.threshold(b, 127, 255, cv2.THRESH_BINARY_INV)
+ret,thresh_g_inv = cv2.threshold(g, 127, 255, cv2.THRESH_BINARY_INV)
+ret,thresh_r_inv = cv2.threshold(r, 127, 255, cv2.THRESH_BINARY_INV)
+binary_inv_color = cv2.merge([thresh_b_inv, thresh_g_inv, thresh_r_inv])
+binary_inv_rgb = cv2.cvtColor(binary_inv_color, cv2.COLOR_BGR2RGB)
+plt.subplot(2, 3, 3)
+plt.imshow(binary_inv_rgb)
+plt.title('Binary Inverse Threshold (127)')
+plt.axis('off')
+# --- 3. Otsu's Binarization ---
+# Apply Otsu's thresholding to each channel
+ret_b, otsu_b = cv2.threshold(b, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+ret_g, otsu_g = cv2.threshold(g, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+ret_r, otsu_r = cv2.threshold(r, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+otsu_color = cv2.merge([otsu_b, otsu_g, otsu_r])
+otsu_rgb = cv2.cvtColor(otsu_color, cv2.COLOR_BGR2RGB)
+plt.subplot(2, 3, 4)
+plt.imshow(otsu_rgb)
+plt.title(f"Otsu's Threshold (B: {ret_b:.1f}, G: {ret_g:.1f}, R: {ret_r:.1f})")
+plt.axis('off')
+# --- 6. Truncated Threshold ---
+thresh_b_trunc = cv2.threshold(b, 127, 255, cv2.THRESH_TRUNC)[1] 
+thresh_g_trunc = cv2.threshold(g, 127, 255, cv2.THRESH_TRUNC)[1]
+thresh_r_trunc = cv2.threshold(r, 127, 255, cv2.THRESH_TRUNC)[1]
+trunc_color = cv2.merge([thresh_b_trunc, thresh_g_trunc, thresh_r_trunc])
+trunc_rgb = cv2.cvtColor(trunc_color, cv2.COLOR_BGR2RGB)
+plt.subplot(2, 3, 5)
+plt.imshow(trunc_rgb)
+plt.title('Truncated Threshold (127)')
+plt.axis('off')
+6/29/26, 1:21 PM
+1. Non Contexual
+localhost:8888/nbconvert/html/2025-26 odd Semester/2025-26 odd semester/S5Computer vision23AID301/Programs/PythonPrograms/1. Non Contex…
+3/4
+# --- 7. To Zero Threshold ---
+thresh_b_tozero = cv2.threshold(b, 127, 255, cv2.THRESH_TOZERO)[1]
+thresh_g_tozero = cv2.threshold(g, 127, 255, cv2.THRESH_TOZERO)[1]
+thresh_r_tozero = cv2.threshold(r, 127, 255, cv2.THRESH_TOZERO)[1]
+tozero_color = cv2.merge([thresh_b_tozero, thresh_g_tozero, thresh_r_tozero])
+tozero_rgb = cv2.cvtColor(tozero_color, cv2.COLOR_BGR2RGB)
+plt.subplot(2, 3, 6)
+plt.imshow(tozero_rgb)
+plt.title('To Zero Threshold (127)')
+plt.axis('off')
+plt.tight_layout()
+plt.show()
+In [ ]:
+ 
+6/29/26, 1:21 PM
+1. Non Contexual
+localhost:8888/nbconvert/html/2025-26 odd Semester/2025-26 odd semester/S5Computer vision23AID301/Programs/PythonPrograms/1. Non Contex…
+4/4

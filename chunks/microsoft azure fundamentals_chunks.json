@@ -1,0 +1,562 @@
+[
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 1,
+        "text": "1.1 \nWHAT IS CLOUD COMPUTING ?​\nCloud computing means delivering computing services (servers, storage, databases, \nnetworking, software) over the internet (\"the cloud\") — instead of owning and running \nthem yourself. ​\n​\nBefore cloud: A company had to buy servers, set them up in a server room, hire IT \nstaff, maintain them — all upfront cost, even before earning ₹1. \nAfter cloud (Azure/AWS): Rent what you need, when you need it. No hardware. Pay \nonly for usage.​\n​\nThe 5 essential characteristics ​\n​"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 2,
+        "text": "1. On-demand self-service — You provision a server yourself in 2 minutes via a portal \nor API. No calling Microsoft, no waiting for approval, no IT ticket. You click → it's live.​\n​\n(On-demand self-service means you can provision computing resources yourself, \ninstantly, without involving any human on the provider's side. No phone calls, no \nemails, no waiting for an IT team to approve and set up your server.) \n You need a server? You go to a portal (or run a command), click a few options, and \nwithin 60–90 seconds a fully functional virtual machine is running and ready for you to \nuse.​\n​\n\"without requiring human interaction with each service provider.\" ​\n​\nEXAMPLE :​\nyou're building a food delivery app and you're about to run a marketing campaign that \ncould bring 10x normal traffic tomorrow. \nWith on-demand self-service: \n●​ Tonight you log into Azure and provision 5 extra VMs — takes 10 minutes total \n●​ Campaign runs, traffic spikes, your app handles it fine \n●​ Next day you delete those 5 VMs — you pay for exactly 18 hours of usage \n●​ Total extra cost: maybe ₹800–1,200 \nWithout cloud, you'd either crash under the load (no spare servers) or have spent \nmonths buying hardware that then sits idle.​\nOn-demand self-service is only possible because of three things working together: \nVirtualization — physical servers are already pre-sliced into thousands of ready VMs. \nWhen you request one, Azure just assigns you a slice — no physical work needed. \nAutomation & orchestration — Azure runs software (like Azure Resource Manager) \nthat handles all provisioning, networking, storage attachment, and OS boot \nautomatically. \nAPIs everywhere — every action you do in the portal is actually an API call behind the \nscenes. This is why you can also automate everything with scripts — the portal and the \nCLI use the exact same API."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 3,
+        "text": "2. Broad network access — Access your resources from any device (laptop, phone, \neven a Raspberry Pi) over standard internet protocols. Location doesn't matter.​\n​\nExtra info : Broad network access is specifically about how you reach the cloud — \nthrough standard internet from any device. It's not about provisioning, scaling, or pricing. ​\n​\nIDEA) 🙂​\n​\nBroad network access means cloud services are available over the network and \naccessible through standard mechanisms — from any device, any location, any \ntime. The \"broad\" means it's not locked to one type of device or one special network. \nThe key word here is standard. Azure doesn't make you install a proprietary client or \nconnect through a special leased line. You use standard internet protocols — \nHTTP/HTTPS, TCP/IP — the same ones your browser uses every day.​\n​\nCOMPARISON :​\n Think of it like ATM banking. Your money lives in the bank's vault. You don't need to go \nto your specific branch, talk to your specific bank manager, or use a special device. Any \nATM, anywhere in the world, connected to the SWIFT network, gives you access to your \nmoney. Standard card + standard PIN + standard network = access from anywhere. ​\nYour data and compute live in Azure's data centers.​\n Any device with internet access + your credentials = you can reach your \nresources. ​"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 4,
+        "text": "3. Resource pooling — Azure's physical servers are shared across thousands of \ncustomers simultaneously (called multi-tenancy). You don't know which physical \nmachine you're on — and you don't need to. Each tenant is fully isolated.​"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 5,
+        "text": "4. Rapid elasticity — Resources can expand or shrink almost instantly. During the IPL \nseason, Hotstar spins up hundreds of servers in minutes. After the match, they spin \nthem back down. This would be impossible with physical servers.​"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 6,
+        "text": "5. Measured service — Everything is metered. Storage per GB, compute per hour, API \ncalls per million. You get a bill at the end of the month — just like electricity.​\n​\n​\n​\n ​"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 7,
+        "text": "1.2– Shared Responsibility Model ​\nWhen you move to the cloud, security and management \nresponsibilities are split between you and Microsoft Azure. You can't \njust hand everything over — some things are always yours to \nmanage. ​\n​\nFOR EX : Azure = building owner → maintains walls, plumbing, elevator, \nelectricity supply \nYou = tenant → lock your own door, protect your valuables, don't damage \nthe property​"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 8,
+        "text": "1.3 — Cloud Models: Public, Private, Hybrid ​\n​\n \nex)​\nPatient records (sensitive) → Private cloud on-premises \nHospital website, appointment booking → Public cloud (Azure) \nBoth connected securely → Hybrid cloud​\n​\n​\nPublic cloud : ​\n​"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 9,
+        "text": "1. Streaming — Netflix / Hotstar ​\nVideo files (movies, shows) stored in AWS S3 — billions of objects, \npetabytes of data \nWhen you press play, AWS CloudFront (CDN) serves the video from the \nnearest edge location to you — that's why Netflix streams smoothly from \nHyderabad even if the origin server is in the US​\n​\nDuring IPL on Hotstar, viewership spikes from 5 million to 50 million in \nminutes — cloud auto-scales the streaming servers. A physical data center \ncould never react that fast \nAfter the match, those extra servers are terminated. Hotstar pays for those \n4 hours of peak compute — not 24/7 idle hardware​"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 10,
+        "text": "2. Food Delivery — Swiggy / Zomato \nDemand for Swiggy is extremely time-dependent — almost zero at 3 AM, \nenormous at 1 PM and 8 PM. \n●​ Backend APIs run on AWS EC2 or Google Cloud — auto-scaling \ngroups add more instances at lunch, remove them at midnight \n●​ Real-time delivery tracking uses Google Maps Platform (public cloud \nAPI) for routing and ETAs \n●​ Every order, restaurant, driver location, payment — stored in cloud \ndatabases (AWS RDS, DynamoDB) \n●​ ML models running on cloud GPUs figure out which restaurants to \nshow you first based on your history \n●​ Push notifications (your order is on the way!) go through AWS SNS \n— millions of notifications per hour at peak​"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 11,
+        "text": "1.4 – Consumption-Based Pricing (Deep Dive)  \n \nBefore cloud, every company had to think like a manufacturer — buy \nequipment, own it, maintain it, depreciate it. Cloud flips this completely. You \nconsume services like utilities — electricity, water, internet — and pay only \nfor what you actually use. \nThis is the shift from CapEx to OpEx, and it changes everything about how \nbusinesses plan, build, and scale. \n \nThe electricity analogy — why it's the perfect mental model \nYou don't build a power plant to power your home. You don't buy copper \nwire, generators, transformers, or turbines. You simply plug in and use \nelectricity — and at the end of the month you get a bill based on exactly \nhow many units (kWh) you consumed. \nCloud computing works identically: \n●​ You don't buy servers, routers, cooling systems, or a server room \n●​ You plug into Azure's infrastructure via the internet \n●​ At the end of the month, Azure sends you a bill based on exactly \nwhat you consumed — compute hours, storage GB, API calls, data \ntransferred \nThe moment you stop using a resource, billing stops. Just like unplugging \nan appliance stops your electricity meter. \n \n \n \n \n \n \nEvery Azure resource is measured on a specific unit. Here's the full picture: \nResource \nBilling unit \nExample cost \nNotes \nVirtual Machine \nPer hour (or per second) \n₹2–50/hr depending \non size \nStops billing when \ndeallocated \nBlob Storage \nPer GB per month \n₹1.5/GB (Hot tier) \nAlso billed per operation \n(reads/writes) \nSQL Database \nPer DTU or vCore per hour \n₹5–100/hr \nDTU = Database Transaction \nUnit \nApp Service \nPer hour (plan-based) \nFree to ₹50+/hr \nFree tier = 60 min CPU/day \nAzure Functions \nPer million executions + \nGB-seconds \nFirst 1M free \nCheapest compute model \nOutbound \nbandwidth \nPer GB transferred out \n₹6–7/GB \nInbound is free \nLoad Balancer \nPer hour + per GB \nprocessed \n₹2/hr + ₹0.5/GB \n— \nAzure CDN \nPer GB delivered \n₹4–6/GB \nVaries by region \n \n \n \n \n \nWith CapEx you either over-provision (waste money) or under-provision (app \ncrashes). With consumption-based OpEx you pay exactly for what you need, \nwhen you need it.  \nGPU stands for **Graphics Processing Unit**. \n \n \nCloud uses the OpEx model — pay for what you use, no upfront CapEx \n \nNo idle cost — you only pay when resources are running/consuming \n \nPredictable pricing — you can estimate costs using the pricing calculator \n \nThe ability to stop paying instantly by deallocating/deleting resources \n \nReserved Instances exist for predictable workloads and give big discounts for \ncommitment \nCapEx = owning infrastructure, OpEx = renting/consuming services \n \n“A company wants to avoid large upfront costs and only pay for what they use. \nWhat model does cloud computing provide?\" → Answer: OpEx / \nconsumption-based pricing."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 12,
+        "text": "1.5 — Benefits of Cloud Computing  \n \n \n1— HIGH AVAILABILITY :  \nHigh availability means your application keeps running even when \nindividual components fail. Azure achieves this through redundancy — \nmultiple copies of everything, so no single failure brings the whole system \ndown. \nAzure measures HA through SLAs (Service Level Agreements) — a \ncontractual guarantee of uptime \n \nReal example: An e-commerce site with 6 VMs in an availability set. A \npower breaker trips in Rack A — VMs 1, 3, 5 go down instantly. The load \nbalancer detects this in seconds and routes all traffic to VMs 2, 4, 6 in Rack \nB. Users experience a blip of latency, not an outage. SLA achieved:"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 13,
+        "text": "99.95%.  \nLoad Balancer (distributes traffic, detects failures) \nThe load balancer is what makes HA actually work in practice. It sits in front \nof your VMs and continuously health-checks each one. The moment a VM \nstops responding, the load balancer stops sending it traffic — automatically, \nwithin seconds. \nAzure Load Balancer works at Layer 4 (TCP/UDP). Azure Application \nGateway works at Layer 7 (HTTP/HTTPS, with SSL termination, \npath-based routing). Both support: \n●​ Health probes (ping every VM every few seconds) \n●​ Automatic removal of unhealthy VMs from the pool \n●​ Automatic addition of VMs back when they recover \n●​ Session persistence (same user always goes to same VM if needed) \n \nPaytm cannot afford downtime. Every minute of downtime during Diwali \nshopping = lakhs of failed transactions. \nTheir HA setup on Azure: \n●​ API VMs deployed zone-redundant across all 3 zones in Central India \n●​ Azure Load Balancer health-probes every VM every 5 seconds \n●​ Azure SQL Database with zone-redundant replicas (automatic, no \nconfig needed) \n●​ If any zone loses power → remaining 2 zones absorb full traffic in \nunder 15 seconds \n●​ Result: 99.99% SLA = max 4.4 minutes downtime per month"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 14,
+        "text": "99.9% SLA requires a single VM with Premium SSD"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 15,
+        "text": "99.95% SLA requires an Availability Set with 2+ VMs"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 16,
+        "text": "99.99% SLA requires Availability Zones \nFault domain = protection against hardware/rack failure \nUpdate domain = protection against planned maintenance downtime \nAzure does NOT guarantee 100% uptime — SLA is always less than 100% \nIf Azure misses the SLA, you get service credits (not cash refunds) \nHA is about staying up within a region — cross-region failover is \n\"reliability/disaster recovery\" \n2— Scalability  \nScalability means your system can handle more load by adding resources.  \n \nReal example: Flipkart's Big Billion Days sale is planned weeks in advance. \nThey scale out from 500 VMs to 5,000 VMs before the sale begins. That's \ndeliberate scalability. On a normal Tuesday, those extra 4,500 VMs would \nbe completely wasteful  \n​\n3 — Elasticity  \nThis benefit is the smarter ongoing solution for scalability! \n Elasticity is scalability made automatic. The system watches your resource \nusage in real time and adds or removes resources without any human \nintervention. \nThink of it like a rubber band — it stretches exactly as much as \nneeded and snaps back when demand drops. No wasted capacity, no \nunder-provisioning. \nAzure achieves this through Virtual Machine Scale Sets and autoscaling \nrules. You define the rules (\"when CPU > 70% for 5 minutes, add 2 VMs; \nwhen CPU < 30% for 10 minutes, remove 2 VMs\"), and Azure does the \nrest.  \n \n4 — Reliability  \nReliability means the system can recover from failures and keep \nfunctioning — even catastrophic ones like an entire data center going \noffline.  \nAzure has 60+ regions globally. Reliability comes from distributing your \ndata and workloads across multiple regions so that a failure in one place \ndoesn't mean total loss. \nKey mechanisms: \n●​ Geo-replication automatically copies your data to a secondary region \n(e.g., West India → South India) — if West India burns down, your \ndata exists in South India \n●​ Azure Traffic Manager detects that a region is down and reroutes all \nuser requests to a healthy region within seconds \n●​ Azure Site Recovery continuously replicates entire VMs to another \nregion — if your primary region fails, you can failover in minutes \nReliability vs HA — the important distinction: \n●​ High Availability = stays up despite component failures within a \nregion (a VM crashes → load balancer routes to other VMs) \n●​ Reliability = survives an entire region going down (Mumbai data \ncenter floods → system fails over to Pune automatically) \n \n5 – SECURITY :  \n \nAzure secures the infrastructure, you secure your data and access.  \nPhysical security: biometric access, 24/7 guards, cameras, mantraps at \nall Azure data centers \nDDoS protection: Azure absorbs distributed denial-of-service attacks at \nthe network edge before they reach your app — the largest DDoS attack \never recorded (2.4 Tbps) was absorbed by Azure with no customer impact \nNetwork security: firewalls, Network Security Groups (NSGs), private \nvirtual networks isolate your resources from the internet \nEncryption: all data in transit uses TLS, all data at rest is encrypted — \nyour storage, databases, VMs \nMicrosoft Entra ID (formerly Azure AD): enterprise-grade identity \nmanagement — multi-factor authentication, conditional access, zero-trust \nprinciples \nMicrosoft Defender for Cloud: continuously scans your Azure resources \nfor security misconfigurations and vulnerabilities \n \n6 — Agility  \nAgility means you can provision, configure, and deploy new resources \nextremely fast — in minutes instead of the weeks it used to take with \nphysical hardware.  \n \n \n \nAZURE PORTAL (need to  know) \n \n\"A developer needs to manage Azure resources without installing any tools \non their local machine. What should they use?\" → Answer: Azure Cloud \nShell (browser-based terminal, no installation required).  \n \n \nM2 :                  CORE AZURE SERVICES – COMPUTE  \n \nAzure Virtual Machines & Availability Sets  \nThe mental model first  \nA Virtual Machine is a software-defined computer running inside \nAzure's physical servers. It has its own CPU, RAM, storage, OS, network \ninterface — everything a physical computer has — but it exists purely as \nsoftware. You interact with it exactly like a real computer: SSH in, install \nsoftware, run code, host websites.  \nAzure takes one massive physical server and slices it into dozens of \nisolated VMs using a hypervisor. Each VM thinks it owns the hardware, \nbut it's actually sharing it with other customers — completely isolated from \nthem.  \nYou create a Windows VM in Azure. Then you connect to it from your \nlaptop using Remote Desktop. It feels like you are using another computer, \nbut that computer is actually running in Azure.  \nResource Group — the logical folder this VM lives in. Always create one \nper project.  \nHow to create virtual machines \nIn the search bar, type Virtual machines and open it. \nClick Create > Azure virtual machine. \nIn the Basics tab, fill in: \n●​ Subscription: choose your Azure subscription \n●​ Resource group: select existing or click Create new \n●​ Virtual machine name: enter a name, like myVM \n●​ Region: choose a location, like East US or Central India \n●​ Image: choose OS, like Windows Server or Ubuntu \n●​ Size: choose CPU/RAM size \nUnder Administrator account: \n●​ For Windows: enter username and password \n●​ For Linux: choose SSH key or password, then enter username \nUnder Inbound port rules: \n●​ For Windows VM, allow RDP 3389 \n●​ For Linux VM, allow SSH 22 \nClick Next: Disks. \n●​ Choose OS disk type, usually Standard SSD or Premium SSD. \nClick Next: Networking. \n●​ Azure can create a virtual network, subnet, public IP, and network \nsecurity group automatically. \n●​ Keep defaults if you are learning. \nClick Next: Management. \n●​ Keep default settings unless you need monitoring or auto-shutdown. \nClick Review + create. \nAzure validates the settings. If validation passes, click Create. \nWait for deployment to finish, then click Go to resource. \n \n \nWHAT WE CONTROL ON  A VM \n \n \n \nOn VMs: \n●​ VMs are IaaS — you manage the OS and above \n●​ VMs can run Windows or Linux \n●​ You pick the size (CPU/RAM) and can resize later \n●​ VM pricing is per-hour; deallocate to stop compute billing \n●​ Storage disk always bills even when VM is deallocated \n●​ You can SSH (Linux) or RDP (Windows) into a VM \nOn Availability Sets: \nAvailability sets help protect your app from single hardware failures \nand planned maintenance downtime.  \nAvailability Sets require a Load Balancer \nAn Availability Set alone doesn't give you HA — your app must be behind a \nLoad Balancer so traffic can actually be routed away from the failed VM to \nthe healthy ones. Without a load balancer, your VMs are spread across \nracks but users still hit one specific VM — if that one fails, they see an \nerror. \nThe load balancer health-probes every VM every few seconds. VM goes \ndown → load balancer stops routing to it → users only hit healthy VMs.  \n \n●​ Fault domain = protection against hardware/rack failure (unplanned) \n●​ Update domain = protection against planned maintenance reboots \n●​ Max 3 fault domains, max 20 update domains per Availability Set \n●​ SLA with Availability Set = 99.95% \n●​ Must combine with a Load Balancer for actual traffic failover \n●​ Free to create — no extra charge for the Availability Set itself \nOn Availability Zones: \nZones give higher protection than Availability Sets because they \nseparate resources across different data center location  \n \n●​ Physically separate buildings within one region \n●​ 3 zones per supported region \n●​ SLA = 99.99% — higher than Availability Sets \n●​ Protection against whole data center failure \n●​ Zone-redundant services: deploy once, Azure replicates across \nzones automatically \n●​ Zone-pinned services: you choose which zone to deploy in \nKey exam traps: \n●​ Stopping a VM from inside the OS ≠ stopping billing. Must \"Stop \n(Deallocate)\" from Azure portal \n●​ An Availability Set alone does NOT guarantee your app stays up — \nyou need a Load Balancer too \n●​ Availability Zones are stronger than Availability Sets — use zones \nwhen available \n●​ VMs are IaaS, not PaaS — you are responsible for OS patching"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 17,
+        "text": "2.2 — Azure App Service  \n \n  Azure App Service is Azure's fully managed Platform-as-a-Service \n(PaaS) for hosting web apps, REST APIs, and mobile backends. You \nwrite your code, push it to Azure, and Azure handles everything else — the \noperating system, web server, security patches, load balancing, and \nscaling. \nwith a Virtual Machine you're renting a computer and doing all the setup \nyourself. With App Service, you're renting an environment that's already \nrunning and waiting for your code.  \nFor ex) \nA VM is like renting an empty restaurant space — you bring your own \nstove, fridge, staff, and manage everything. App Service is like renting a \nfully-equipped cloud kitchen — kitchen, equipment, electricity, gas \nconnection all ready. You just bring the recipe (your code) and start cooking \n(running).  \n \nReal-life example: A college team builds a hackathon project — frontend \nin React, backend in FastAPI (Python). They deploy the Python backend \ndirectly on App Service using the Python 3.11 runtime, while the React \nfrontend (just static files) goes on Azure Static Web Apps (a related \nservice). No server configuration needed for either. \nFastAPI is a Python framework for building APIs.  \nhow a student team can put their app on the internet using Azure \nwithout managing servers manually."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 18,
+        "text": "1. Frontend in React​\nThis is the part users see in the browser: buttons, pages, forms, design, \ndashboard, etc. \nAfter building a React app, it becomes simple static files like: \n●​ index.html \n●​ CSS files \n●​ JavaScript files \n●​ images \n \nThese files do not need a full backend server to run. They can be \nhosted on Azure Static Web Apps.  \nSo users open something like: \nhttps://my-hackathon-app.azurestaticapps.net \nand they see the React website."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 19,
+        "text": "2. Backend in FastAPI Python​\nThis is the server-side part. It handles logic like: \n●​ login \n●​ saving data \n●​ talking to a database \n●​ processing form submissions \n●​ returning API responses \nThe team deploys this backend to Azure App Service. Azure App Service \nalready has a Python 3.11 runtime, meaning Azure already knows how to \nrun Python 3.11 applications. \nSo the team does not need to create a VM, install Linux, install Python, \nconfigure networking, or manage server patches. \nThey just upload/deploy the FastAPI code, and Azure runs it. \nIn short"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 20,
+        "text": "3.​ React sends the data to the FastAPI backend."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 21,
+        "text": "4.​ FastAPI processes it and maybe saves it in a database."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 22,
+        "text": "6.​ React shows the result to the user. \n \n    React frontend goes to Azure Static Web Apps \n●​ FastAPI Python backend goes to Azure App Service \n●​ Azure runs and hosts both \n●​ You do not manage the physical or virtual server yourself \n \n \n \nA startup runs their main customer-facing API on App Service (always-on, \npredictable traffic). They use Azure Functions for occasional background \njobs like resizing uploaded images. They avoid VMs entirely because they \ndon't want to manage OS patches.  \nApp Service is a PaaS — Azure manages OS, runtime, patching, load \nbalancing \nSupports multiple languages: .NET, Java, Node.js, Python, PHP, or custom \nDocker containers \nApp Service Plan determines compute resources, pricing tier, and available \nfeatures \nFree tier (F1) has CPU time limits and no custom domain support \n●​ Deployment slots allow zero-downtime swaps between staging and \nproduction (Standard tier+) \n●​ Auto-scaling (scale out) is available from Standard tier upward \n●​ Scale up = bigger tier; scale out = more instances \nSecurity & domains: \n●​ Free, auto-renewing SSL certificates available via App Service \nManaged Certificates \n●​ Custom domain mapping supported from Shared tier upward \nApp Service is PaaS, not IaaS  \nwhich service lets you deploy code without managing the underlying \nOS,\" the answer is App Service, not Virtual Machines. If it mentions \n\"zero-downtime deployment with rollback capability,\" that's pointing to \ndeployment slots specifically.  \n \nM 2.3 Azure Container Instances (ACI) & Azure Kubernetes \nService (AKS)  \nWHY CONTAINERS EXIST AT ALL? \nYour app runs perfectly on your laptop (Python 3.11, specific library \nversions, your OS config) but breaks on the production server (different \nPython version, missing libraries, different OS). This mismatch between \nenvironments has wasted millions of developer hours historically.  \nContainers solve this by packaging your app + every dependency it \nneeds (libraries, runtime, config files) into one single portable unit. \nThis unit runs identically everywhere — your laptop, a colleague's laptop, a \ntest server, or Azure — because the entire environment travels with the \napp.  \n \nDocker makes the application environment portable and repeatable, so the \napp behaves the same across different machines. \nReal life example :  \n A team has three developers — one on Mac, one on Windows, one on \nLinux. Without containers, \"works on my machine\" bugs eat hours every \nweek. They wrap their Node.js app in a Docker container with a \nDockerfile. Now everyone runs docker run myapp and gets the \nexact same environment — same Node version, same OS libraries — \nregardless of their actual laptop.  \nVirtual Machine \n●​ Includes a full guest operating system \n●​ Has its own kernel \n●​ Needs more CPU, RAM, and disk \n●​ Starts slower \n●​ Stronger isolation \n●​ Example: running Ubuntu VM on a Windows laptop using VirtualBox \n \nContainer \n●​ Shares the host machine’s OS kernel \n●​ Packages only the app, dependencies, libraries, and config \n●​ Lightweight and fast to start \n●​ Uses fewer resources \n●​ Isolation is good, but usually lighter than a VM \n●​ Example: running a Node.js app in Docker \n \nAzure Container Instances (ACI)  \nACI is the simplest possible way to run a single container in Azure — \nno VM provisioning, no cluster setup, no orchestration. You give Azure a \ncontainer image, it runs it, you pay for exactly the seconds it ran.  \nYou have a Docker image (e.g., myapp:latest) \n        ↓ \naz container create --image myapp:latest --cpu 1 --memory 1.5 \n        ↓ \nAzure spins up the container in ~5-10 seconds \n        ↓ \nContainer runs your task \n        ↓ \nContainer stops (or completes) — billing stops immediately \n \n \n \nWhat is orchestration? \nRunning one container manually is easy. But in a real system, you may \nneed 20 backend containers, 3 frontend containers, health checks, restarts, \nnetworking, secrets, and rolling updates. \nSimple definition: \nACI lets you run a container directly in Azure without managing \nservers or Kubernetes.  \nAn orchestrator manages all that. \nA photo-sharing app needs to resize and watermark every image a user \nuploads. Instead of running a VM 24/7 waiting for uploads (paying even at \n3 AM when no one uploads anything), they trigger an ACI container \nwhenever an upload happens. The container spins up, processes the \nimage in 2 seconds, and shuts down. They pay for roughly 2 seconds of \ncompute per upload — drastically cheaper than a constantly running VM.  \nAzure Kubernetes Service (AKS)  \nCommon orchestration tools: \n●​ Kubernetes \nWhen your application grows into many containers that need to work \ntogether — communicating, scaling independently, recovering \nautomatically from crashes — you need an orchestrator. That's Kubernetes \n(often shortened to K8s) AKS is Azure's managed Kubernetes offering.  \n \nReal example: Swiggy-scale order management 3 microservices (orders, \npayments, notifications), each in separate pods Orders pod scales to 20 \nreplicas at lunch · payments stays at 5 · notifications at 3 \nIf Node 1 crashes → Kubernetes reschedules its pods onto Node 2 \nautomaticallyIf traffic spikes further → cluster autoscaler adds Node 3 \nwithin minutes  \nPod — the smallest deployable unit in Kubernetes  \nNode — a worker machine (a VM) that runs pods. A cluster has multiple \nnodes for redundancy and capacity. \nCluster — the entire collection of nodes + control plane working together \nas one system. \nControl plane — Kubernetes' \"brain.\" It decides which pods go on which \nnodes, monitors health, and handles scheduling. In AKS, Azure manages \nthis for you completely free — you don't pay for the control plane, only \nfor the worker node VMs. \nDeployment — a configuration that tells Kubernetes \"I want 5 replicas of \nthis container running, always.\" If one crashes, Kubernetes automatically \nstarts a new one to maintain 5. \nService — a stable networking endpoint that routes traffic to the right pods, \neven as pods get created/destroyed/rescheduled. \nSelf-healing — Kubernetes' superpower \nIf a pod crashes or a node fails entirely, Kubernetes automatically \ndetects it and reschedules the affected pods onto healthy nodes — \nwithout any human intervention. This is fundamentally different from a \ntraditional VM setup where a crash means manual intervention. \nex) \n \nSwiggy's backend is split into microservices: an Orders service, a \nPayments service, and a Notifications service — each running as \nseparate pods in AKS. At lunchtime, the Orders service experiences 10x \ntraffic. Kubernetes' Horizontal Pod Autoscaler detects high CPU \nusage on the Orders pods and automatically scales from 4 replicas to \n20 replicas within minutes. Payments and Notifications remain \nunaffected, staying at their normal replica count. If one of the underlying \nVM nodes crashes due to a hardware fault, Kubernetes instantly \nreschedules all the pods that were on it to healthy nodes — customers \nplacing orders never notice.  \n \nA company doesn't want their proprietary app code published publicly on \nDocker Hub. They push all their container images to a private Azure \nContainer Registry instead, and grant their AKS cluster permission to \npull images from it. Only their own infrastructure can access these \nimages — competitors or random internet users cannot.  \nSimple definition: \nAKS is Azure’s managed Kubernetes service for running and \norchestrating many containers at scale.  \nTopic 2.4 — Azure Functions: Serverless Compute  \n \nThink of a motion-sensor security light outside a house. It doesn't run 24/7 \nburning electricity — it sits dormant, and the moment something triggers it \n(motion detected), it switches on, does its job (lights up the area), then \nswitches off again. Azure Functions work identically — dormant until \ntriggered, active only for the task, then back to sleep.  \nWe will have servers but we will never think about them at all  \nA trigger is the event that causes a function to execute. This is the \nsingle  \n \nAzure Functions offers three hosting plans, each with very different cost \nand scaling behaviors.  \nEvery trigger examples :  \nHTTP Trigger — Real-life example: A mobile food delivery app calls GET \n/api/checkOrderStatus?id=123 — this HTTP call directly triggers a function that \nqueries the database and returns the order status. No app server is running 24/7; the \nfunction only exists for the duration of that request. \nTimer Trigger — Real-life example: An e-commerce site needs to send \"your cart is \nwaiting\" reminder emails every night at 2 AM. A Timer-triggered function runs on a cron \nschedule (0 0 2 * * *), checks for abandoned carts, sends emails, and goes back to \nsleep until the next night. \nBlob Storage Trigger — Real-life example: A user uploads a profile picture to Azure \nBlob Storage. This automatically triggers a function that resizes the image into \nthumbnail, medium, and full sizes, then saves them back — without the upload process \never needing to call an API explicitly. \nQueue Trigger — Real-life example: When a customer places an order on Swiggy, the \norder is pushed into an Azure Storage Queue. A Queue-triggered function picks it up, \nprocesses the payment, and updates the order status — decoupling the \"place order\" \naction from the \"process payment\" logic so the user's app stays fast and responsive. \nCosmos DB Trigger — Real-life example: A multiplayer game stores player scores in \nCosmos DB. Whenever a new high score is inserted, a Cosmos DB-triggered function \nfires automatically to update the global leaderboard cache, without the game client \nneeding to call a separate API. \n \nEvent Hub Trigger — Real-life example: A fleet of delivery bikes sends GPS location \ndata every 5 seconds via Azure Event Hub. An Event Hub-triggered function processes \nthis continuous stream in real time to update the live tracking map customers see in \ntheir app. \n \nWe have plans(premium,consumption ,dedicated plans etc ) topic  \n(not important ig) \nWhat is a cold start ? \nA student's hobby project API on the free Consumption plan goes 2 hours \nwithout any requests. The next request takes an extra 1-2 seconds to \nrespond because Azure needs to spin up a fresh instance — that's the cold \nstart.  \nDurable Functions — for complex, multi-step workflows  \nNormal functions are stateless and short-lived — perfect for single tasks. \nBut what about workflows with multiple steps, waiting periods, or \ncoordination between several functions? That's where Durable Functions \ncome in — an extension that lets you write stateful, long-running \norchestrations using normal code.  \nEX) \nAn e-commerce order fulfillment process needs to: (1) charge the \ncustomer, (2) wait for warehouse confirmation, (3) trigger shipping, (4) send \na confirmation email — and if any step fails, automatically retry or roll back \nprevious steps. A Durable Function orchestrates this entire multi-step \nworkflow, maintaining state across each step, even if it takes hours or days \nto fully complete (e.g., waiting for warehouse stock).  \nBindings — connecting to other services without boilerplate code  \nBindings are a way to connect your function to other Azure services (input \nor output) declaratively, without writing manual connection/SDK code.  \nServerless means no server management — Azure handles all \ninfrastructure provisioning and scaling \nFunctions are event-driven — they execute in response to a trigger, not \ncontinuously \nBilling is based on execution time (Consumption plan), not on idle/running \ntime \nA trigger is what causes the function to run  \n: If a question describes \"a workload that should run only when triggered by \nan event and the organization wants to pay only for the compute time used\" \n— the answer is Azure Functions, not App Service or VMs. If it mentions \n\"the function needs to avoid cold starts and respond instantly to every \nrequest\" — that points to the Premium plan, not Consumption."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 23,
+        "text": "2.5 AZURE VIRTUAL DESKTOP \nAzure Virtual Desktop (AVD) is a fully cloud-hosted Windows desktop \nand Office applications that you access from any device over the \ninternet — the actual computing happens in Azure's data centers, and your \ndevice is just a screen and keyboard.  \nAzure Virtual Desktop = your office Windows desktop, but hosted in Azure \ncloud.  \nThink about how Netflix works: the movie isn't stored on your TV. Netflix's \nservers do all the work (storing, encoding, streaming) and your TV just \ndisplays the output. Azure Virtual Desktop works the same way — Azure's \nservers run the full Windows OS, your apps, your files — your device just \nshows you the screen and sends your keyboard/mouse inputs.  \n \n \nWhy Do We Need Azure Virtual Desktop? \nNormally, every employee needs a laptop or desktop with installed \nsoftware. \nThat creates problems: \n●​ Company must buy many laptops \n●​ Software must be installed on every machine \n●​ IT team must update each system \n●​ Data may be stored on user laptops \n●​ If laptop is lost, company data is at risk \n●​ Remote workers may struggle to access office apps securely \nAzure Virtual Desktop solves this by keeping the desktop and apps in \nAzure. \nUsers only connect to it. \nHow It Works  \nThink of Azure having many virtual computers. \nA company creates virtual desktops in Azure. Employees connect to those \ndesktops using a Remote Desktop app or browser. \nBasic flow:"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 24,
+        "text": "1.​ Company creates Azure Virtual Desktop environment."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 25,
+        "text": "2.​ Azure runs Windows desktops on cloud virtual machines."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 26,
+        "text": "3.​ Employees log in using a company account."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 27,
+        "text": "4.​ Employee sees a Windows desktop on their screen."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 28,
+        "text": "5.​ Apps and data run inside Azure, not mainly on the employee laptop. \nSo your laptop acts like a screen, keyboard, and mouse. The real computer \nis in Azure. \n \nTYPES OF AZURE VIRTUAL DESKTOP ACCESS"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 29,
+        "text": "1. Full Desktop \nThe user gets a complete Windows desktop. \nThey can use Start menu, File Explorer, browser, Office apps, and other \nsoftware. \nReal-life example:​\nAn employee working from home opens a full office desktop in Azure and \nworks like they are sitting in the office."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 30,
+        "text": "2. RemoteApp \nThe user does not see the full desktop. They only see a specific app \nrunning from Azure. \nExample: only Excel, only accounting software, or only a hospital \nmanagement app. \nReal-life example:​\nA cashier only needs billing software, not a full Windows desktop. Azure \ncan show only that billing app \n \nBenefits of Azure Virtual Desktop  \nWork from anywhere \nBetter security \nEasy management \nCost saving  \nScalable"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 31,
+        "text": "2.6 Hands-on: Deploy a Web App on Azure App Service \nyou will take a web application from your computer and publish it on \nAzure, so anyone can open it using a website URL.  \nAzure App Service is a platform where you can host web applications \nwithout managing a full server manually.  \nWhat Is a Web App?  \nA web app is an application that runs in a browser.  \nWhat Is Azure App Service? \nAzure App Service is a cloud service used to host web apps, REST APIs, \nand backend applications \nYou do not need to create a VM, install an operating system, install a web \nserver, or manage patches. Azure handles the platform. \nYou mainly upload your code and configure settings \nIf App Service Plan is like a building, Web App is like one shop inside \nthat building.  \nDeployment means uploading your application code to Azure and \nmaking it live.  \nCommon deployment methods: \n●​ Azure Portal \n●​ Visual Studio Code \n●​ GitHub \n●​ Azure CLI \n●​ ZIP upload \n●​ Azure DevOps \n \nDefault Domain \nAfter deployment, Azure gives your app a default URL like: \nhttps://mycollegeapp.azurewebsites.net \nThis is called the default domain. \nA CCTV recording helps you know what happened in a shop. Logs help \ndevelopers know what happened inside the app.  \nScaling means increasing or decreasing resources based on traffic.  \nAzure App Service supports HTTPS. \nHTTPS makes communication between browser and website secure. \nSending data through HTTPS is like sending a document in a locked \nenvelope instead of an open postcard.  \nUsing Visual Studio Code:"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 32,
+        "text": "7.​ Wait for deployment \nHelps in the project!! Ig  \nAfter creating app of our app or website we need to do this as a \nbeginner !! \n \nUsing Visual Studio Code: \nCreate an Azure account. \nGo to Azure Portal. \nSearch App Services. \nClick Create Web App. \nChoose: \n●​ Runtime stack: Python 3.11 or your chosen technology \n●​ Region: nearest region \n●​ App Service Plan: beginner/free/basic plan \nCreate the App Service. \nDeploy your code from: \n●​ GitHub, or \n●​ Visual Studio Code Azure extension \nOpen the Azure website URL:"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 33,
+        "text": "3.1 Azure Storage: Blob, Queue, Table, File  \nAzure Storage is a cloud storage service from Microsoft Azure. It is used to \nstore different types of data online.  \nAzure Storage is like a big online storage space where applications can \nkeep files, images, messages, records, backups, and shared folders.  \nWHAT IS AZURE STORAGE? \nAzure Storage is used when your application needs to save data in the \ncloud.  \nAzure Storage helps you store this data safely and access it from anywhere  \n \nInside one storage account, you can create: \n●​ blob containers \n●​ queues \n●​ tables \n●​ file shares \n \n​\n1 Azure Blob Storage \nBlob means binary large object .It is used to store unstructured files. \n \nUnstructured means files that do not fit neatly into rows and columns.  \nBlob Storage is used to store files like photos, videos, documents, and \nbackups.  \nWhen a customer opens your website, the app loads the dress images \nfrom Blob Storage"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 34,
+        "text": "2. Azure Queue Storage  \nAzure Queue Storage is used to store messages temporarily.  \nQueue Storage is like a waiting line for tasks"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 35,
+        "text": "3. Azure Table Storage  \nAzure Table Storage is used to store structured NoSQL data. \nTable Storage is used to store simple records in table format"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 36,
+        "text": "4. Azure File Storage \nAzure File Storage is used to create shared folders in the cloud. \nIt works like a normal network file share. \nAzure Files gives you a shared folder that multiple users or systems can \naccess.  \ncommon file sharing protocols like SMB and NFS.  \nIn a boutique business, designers may create measurement sheets, invoice \nPDFs, blouse patterns, or fabric design documents. \nThese files can be stored in Azure File Storage so staff can access them \nfrom different computers."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 37,
+        "text": "3.2 Azure Storage Redundancy Options  \nAzure Storage redundancy means Azure keeps extra copies of your \ndata so that your data is not lost if hardware, server, rack, data center, or \neven a region has a problem.  \nIf you store a dress image in Azure Storage, Azure does not keep only one \ncopy. It keeps multiple copies depending on the redundancy option you \nchoose. \nAzure has these important redundancy types:"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 38,
+        "text": "4.​ RA-GRS - Read-Access Geo-Redundant Storage"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 39,
+        "text": "6.​ RA-GZRS - Read-Access Geo-Zone-Redundant Storage"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 40,
+        "text": "1. LRS - Locally Redundant Storage \nLRS full form: Locally Redundant Storage \nLRS keeps 3 copies of your data inside a single physical location in one \nAzure region. \nIt protects against: \n●​ disk failure \n●​ server failure \n●​ rack failure"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 41,
+        "text": "2. ZRS - Zone-Redundant Storage \nZRS full form: Zone-Redundant Storage \nZRS keeps copies of your data across multiple availability zones in the \nsame Azure region. \nAvailability zones are separate physical data center locations inside one \nregion."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 42,
+        "text": "3. GRS - Geo-Redundant Storage \nGRS full form: Geo-Redundant Storage \nGRS keeps your data in your main region and also copies it to another \npaired Azure region far away. \n3 copies in the primary region \n3 copies in the secondary region \nIt protects against: \n●​ local hardware failure \n●​ data center failure \n●​ full primary region disaster"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 43,
+        "text": "4. RA-GRS - Read-Access Geo-Redundant Storage \nRA-GRS full form: Read-Access Geo-Redundant Storage \nRA-GRS is like GRS, but with one extra benefit: \nYou can read data from the secondary region also. \nRA-GRS keeps data in another region and allows read access to that \nbackup region  \nThis is useful when the primary region is slow or unavailable. Your app \nmay still read data from the secondary region."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 44,
+        "text": "5. GZRS - Geo-Zone-Redundant Storage \nGZRS full form: Geo-Zone-Redundant Storage \nGZRS combines ZRS and GRS. \nIt stores data: \n●​ across multiple availability zones in the primary region \n●​ also copies data to a secondary region"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 45,
+        "text": "6. RA-GZRS - Read-Access Geo-Zone-Redundant \nStorage \nRA-GZRS full form: Read-Access Geo-Zone-Redundant Storage \nRA-GZRS is the strongest option in this list. \nIt gives: \n●​ zone redundancy in the primary region \n●​ backup copy in secondary region \n●​ read access to secondary region \nA boutique stores records in multiple buildings in Hyderabad and also in \nMumbai. If Hyderabad has a problem, staff can still read records from \nMumbai.  \nLRS = copies in one local place \nZRS = copies in different zones \nGRS = copies in another geography/region \nRA = read access to backup region \nGZRS = zone + geo protection \nRA-GZRS = zone + geo protection + read access \nIf you choose LRS, Azure keeps 3 copies in the same local place. Good for \npractice. \nIf you choose ZRS, Azure keeps copies in different data center zones in the \nsame region. Better for real apps. \nIf you choose GRS, Azure also copies your data to another region. Good \nfor disaster recovery. \nIf you choose RA-GRS, your app can read from the backup region if the \nmain region has trouble. \nIf you choose GZRS, your data is protected across zones and another \nregion. \nIf you choose RA-GZRS, your data gets the strongest protection and can \nalso be read from the backup region. \nSo, storage redundancy is like deciding how many backup copies you \nwant and where those backup copies should be kept."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 46,
+        "text": "3.3 Azure Virtual Network, VNet  \nAzure Virtual Network, usually called VNet, is a private network in \nAzure.  \n \nJust like a college or company has a private Wi-Fi/LAN network, Azure lets \nyou create a private cloud network for your virtual machines, databases, \napp services, and other resources. \n \nWithout a network, cloud resources cannot communicate properly.  \nYour boutique app may have: \n●​ Web App / App Service \n●​ Virtual Machine \n●​ Database \n●​ Storage Account \n●​ Admin system \nThese resources need a safe way to communicate. \nA VNet helps you: \n●​ connect Azure resources privately \n●​ control traffic \n●​ improve security \n●​ divide network into subnets \n●​ connect Azure to your office network \n●​ connect different Azure networks \nImportant Topics in Azure VNet"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 47,
+        "text": "1. Address Space \nAddress space is the IP range of your VNet."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 48,
+        "text": "2. Subnet \nA subnet is a smaller network inside a VNet. \nSimple meaning: \nSubnet means dividing one big network into smaller par \nWeb Subnet: 10.0.1.0/24 \nDatabase Subnet: 10.0.2.0/24 \nAdmin Subnet: 10.0.3.0/24 \nWhy use subnets? \n●​ organize resources \n●​ separate web, database, and admin systems \n●​ apply security rules separately \n●​ control traffic better"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 49,
+        "text": "3. Private IP Address \nA private IP address is used inside the VNet. \nResources inside the VNet use private IPs to communicate with each other."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 50,
+        "text": "4. Public IP Address \nA public IP address is used to access a resource from the internet."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 51,
+        "text": "5. Network Security Group, NSG \nA Network Security Group is like a firewall for Azure network traffic. \nIt controls inbound and outbound traffic using rules. \nNSG decides what traffic is allowed and what traffic is blocked."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 52,
+        "text": "6. Inbound and Outbound Traffic \nInbound traffic means traffic coming into a resource. \nExample: \nA user opening your website from the internet. \nOutbound traffic means traffic going out from a resource. \nExample: \nYour app calling a payment API or sending email. \nReal-life example:​\nCustomers entering a boutique = inbound. Staff delivering clothes to a \ncustomer = outbound."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 53,
+        "text": "7. Ports \nA port is like a door number for a specific type of network service. \nIP address finds the building, port finds the correct door/service."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 54,
+        "text": "8. Route Table \nA route table controls where network traffic should go. \nThat travelling data is called network traffic.  \ntraffic to internet goes through firewall \ntraffic to database goes through private route \ntraffic to office network goes through VPN gateway"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 55,
+        "text": "9. VNet Peering \nVNet peering connects two Azure VNets privately. \nFor example :  \nVNet A has web app resources \nVNet B has database resources \nPeering allows private communication between them"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 56,
+        "text": "10. VPN Gateway \nA VPN Gateway connects your Azure VNet to your office/home network \nsecurely through the internet. \nVPN Gateway creates a secure tunnel between Azure and another \nnetwork.  \nWhy Do We Need VPN Gateway? \nImagine your company has resources in two places:"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 57,
+        "text": "2.​ Some servers are in Azure. \nNow the office computers need to access Azure resources privately and \nsecurely. \nIf they use normal public internet, it may not be safe. \nSo Azure VPN Gateway creates an encrypted tunnel between the office \nand Azure. \nData travels safely through that tunnel"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 58,
+        "text": "11. DNS in VNet \nDNS converts names into IP addresses. \nDNS is like a contact list that converts names into numbers."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 59,
+        "text": "12. Service Endpoints \nService endpoints allow Azure resources in your VNet to securely access \nAzure services over Azure’s internal network. \nA VM inside your VNet accesses Azure Storage securely.  \nService endpoint gives your VNet a safer path to Azure services."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 60,
+        "text": "13. Private Endpoint \nA private endpoint gives an Azure service a private IP address inside your \nVNet. \nPrivate Endpoint makes Azure services available privately inside your \nnetwork."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 61,
+        "text": "3.4 Azure VPN Gateway and ExpressRoute  \nThis topic is about connecting Azure to another network securely.  \nThat other network can be: \n●​ your college network \n●​ your office network \n●​ your home laptop \n●​ another Azure network \n●​ a company data center \nThere are two main services in this topic:"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 62,
+        "text": "2.​ Azure ExpressRoute \n \n \nVPN Gateway connects to Azure securely through the public internet. \nExpressRoute connects to Azure through a private dedicated connection. \n You do not want everything open to the public internet. \nSo you use VPN Gateway or ExpressRoute to create a secure \nconnection. \nPart 1: Azure VPN Gateway  \nAzure VPN Gateway is a service that creates a secure encrypted tunnel \nbetween Azure Virtual Network and another network.  \nOffice / College / Home Network <----Secure VPN Tunnel----> \nAzure VNet \nEncryption means data is converted into unreadable form while travelling. \nSo even though VPN uses the public internet, the data is protecte \nImportant Terms in VPN Gateway  \nAZURE VNet  \nA VNet is your private network inside azure. Your Azure resources live \ninside this network."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 63,
+        "text": "2. GatewaySubnet \nA GatewaySubnet is a special subnet inside the VNet where the VPN \nGateway is placed. \nReal-life example: If VNet is a building, GatewaySubnet is the main \nsecurity gate area.  \nLocal Network Gateway \nA Local Network Gateway represents your office/college network inside \nAzure. \nIt stores details like: \n●​ public IP address of your office router \n●​ private IP range of your office network"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 64,
+        "text": "4. VPN Device \nA VPN device is the router/firewall on your office side."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 65,
+        "text": "5. Shared Key \nA shared key is a secret password used by both sides of the VPN. \nAzure and your office VPN device must use the same key. \nReal-life example:​\nTwo guards at both ends of a private tunnel use the same secret code. \nTypes of VPN Gateway Connections"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 66,
+        "text": "1. Site-to-Site VPN \nThis connects a complete office/college network to Azure"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 67,
+        "text": "2. Point-to-Site VPN \nThis connects one individual laptop/computer to Azure."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 68,
+        "text": "3. VNet-to-VNet VPN \nThis connects two Azure Virtual Networks. \nWhen Should We Use VPN Gateway? \n●​ you want secure connection to Azure \n●​ you have small or medium business needs \n●​ you want lower cost than ExpressRoute \n●​ internet-based secure tunnel is enough \n●​ you need remote worker access \nPart 2: Azure ExpressRoute  \nWhat Is ExpressRoute? \nAzure ExpressRoute creates a private dedicated connection between \nyour network and Microsoft Azure. \nExpressRoute is a private road to Azure, not the public internet.  \nIt does not travel through normal public internet like VPN.  \nWhy ExpressRoute? \nExpressRoute gives: \n●​ more reliable connection \n●​ faster speed \n●​ lower latency \n●​ better security \n●​ private dedicated connectivity \nVPN is like using a secure car on a public highway. \nExpressRoute is like having your own private highway directly to \nAzure.  \nWhen Should We Use ExpressRoute? \nUse ExpressRoute when: \n●​ business needs very high reliability \n●​ very large data transfer is needed \n●​ low latency is important \n●​ company does not want traffic over public internet \n●​ enterprise-level security is required \n \n \nScalability \nScalability means the ability of a system to handle more users, more \nrequests, or more data when demand increases. \nScalability = your app can grow when more people use it."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 69,
+        "text": "1. Vertical scaling / Scale up​\nIncrease the power of one server. \nExample:​\nMove from 2 GB RAM to 8 GB RAM, or from 1 CPU to 4 CPUs."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 70,
+        "text": "2. Horizontal scaling / Scale out​\nAdd more servers or instances. \nExample:​\nInstead of one server running your app, run 3 copies of the app. \nReal-life example:​\nA shop opens more billing counters when many customers are waiting. \nGlobal Presence \nGlobal presence means Azure has data centers and regions in many parts \nof the world. \nGlobal presence = Azure can run your app close to users in different \ncountries."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 71,
+        "text": "4.1 Microsoft Entra ID, Azure AD Overview  \nMicrosoft Entra ID is Microsoft’s cloud-based identity and access \nmanagement service. \nEarlier, it was called Azure Active Directory, or Azure AD. Now the new \nname is Microsoft Entra ID. \nMicrosoft Entra ID is used to manage users, logins, passwords, \npermissions, and access to Azure/cloud apps.  \nIt answers questions like: \n●​ Who is the user? \n●​ Is the user allowed to log in? \n●​ What apps can the user access? \n●​ What Azure resources can the user manage? \n●​ Should the user use MFA? \n●​ Is this login safe or risky \nWhy Do We Need Microsoft Entra ID? \nImagine a college or company has many users: \n●​ students \n●​ teachers \n●​ developers \n●​ admins \n●​ managers \n●​ guests \nEach person may need access to different systems. \nExample: \n●​ Student can access student portal \n●​ Teacher can access attendance system \n●​ Admin can manage Azure resources \n●​ Accountant can access billing software \n●​ Guest user can access only one shared file \nWithout identity management, access becomes messy and unsafe. \nMicrosoft Entra ID keeps everything organized and secure."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 72,
+        "text": "1. Identity \nIdentity means the digital account of a person, application, or device. \nIn Azure, identity is usually represented by a user account like: \nsujay@college.edu"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 73,
+        "text": "2. User Account \nA user account is an identity created for a person. \nA user account is used to sign in to Azure, Microsoft 365, Teams, \nOutlook, and other apps.  \nAuthentication = verifying login identity. \nYou enter email and password to log in to Azure Portal. Entra ID \nchecks if they are correct."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 74,
+        "text": "4. Authorization \nAuthorization means deciding what the authenticated user is allowed to \ndo. \nTenant is your organization’s private identity space in Microsoft \ncloud.  \nA directory is the database that stores identity information. \nGroup \nA group is a collection of users. \nInstead of giving permission to each user one by one, you can give \npermission to a group. \nApplication Registration \nApplication registration means adding your app into Microsoft Entra ID so it \ncan use Microsoft login or access Microsoft services. \nService Principal \nA service principal is like an identity for an application, not a human. \nApps need identities too. \nA managed identity is an identity automatically managed by Azure for an \nAzure resource  \nManaged identity lets Azure resources securely access other Azure \nservices without storing passwords.  \nSingle Sign-On, SSO \nSSO means one login can access multiple apps. \nMulti-Factor Authentication, MFA \nMFA means using more than one proof to log in. \nExample:"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 75,
+        "text": "2.​ OTP or Authenticator app approval \nEven if someone knows your password, they still need your phone/app \napproval.  \nGuest Users / External Users \nMicrosoft Entra ID allows adding people outside your organization as guest \nusers. \nDevice Management \nEntra ID can also track and manage devices like laptops and mobiles."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 76,
+        "text": "4.2 Authentication: SSO, MFA, Passwordless  \n \nIn Microsoft Entra ID / Azure AD, authentication is used when users sign in \nto: \n●​ Azure Portal \n●​ Microsoft Teams \n●​ Outlook \n●​ OneDrive \n●​ company apps \n●​ college portals \n●​ HR/payroll systems \n●​ custom web apps \n \nSSO - Single Sign-On \nMFA - Multi-Factor Authentication \nPasswordless Authentication \nSSO is used in: \n●​ colleges using one account for Teams, Outlook, and LMS \nCommon MFA Methods"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 77,
+        "text": "5. Security Key  \nReal Life Where MFA Is Used \nMFA is used in: \n●​ Azure Portal admin login \n●​ Microsoft 365 company login \n●​ online banking \n●​ UPI payment apps \n●​ Gmail and Outlook \n●​ company VPN \n●​ college admin portal \n●​ hospital systems"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 78,
+        "text": "4. Passwordless Authentication  \nPasswordless authentication means logging in without typing a password  \nExamples: \n●​ fingerprint \n●​ face recognition \n●​ Microsoft Authenticator \n●​ security key \n●​ Windows Hello"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 79,
+        "text": "4.3 Conditional Access Policies  \nConditional Access is a Microsoft Entra ID security feature that controls \naccess based on conditions.  \nIf a user logs in from an unknown country, then require MFA. \nOr: \nIf an admin logs in, then always require MFA. \nIt helps organizations decide who can access what, from where, using \nwhich device, and under what security rules. \nA company applies stricter login rules to administrators because admin \naccounts can delete resources or change security settings.  \nApply policy to: Global Administrators \nRule: Always require MFA"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 80,
+        "text": "2. Cloud Apps or Actions \nThis decides which app or action the policy applies to."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 81,
+        "text": "3. Conditions \nConditions describe the login situation. \nImportant conditions include: \n●​ location \n●​ device type \n●​ sign-in risk \n●​ user risk \n●​ client app \n●​ platform \nConditions are the details of the login attempt.  \nA company in India may allow normal login from India, but require MFA or \nblock login from unknown countries  \nPlatform Condition \nPlatform means the operating system. \nExamples: \n●​ Windows \n●​ macOS \n●​ Android \n●​ iOS \n●​ Linux \nSign-In Risk \nSign-in risk means the current login attempt looks suspicious. \nClient Apps \nClient app means the type of app used for login. \nAccess Controls \nAfter conditions are checked, Conditional Access applies access controls. \nBlock Access \nThis completely denies login. \nGrant Access \nThis allows login, sometimes with extra requirements. \nrequire MFA \nrequire compliant device \nrequire password change \nSession Controls \nSession controls decide what happens after login. \nSign-In Frequency \nThis controls how often users must sign in again. \nRequire sign-in every 8 hours \nBanking and finance apps often ask users to re-authenticate regularly.  \nPersistent Browser Session \nThis controls whether users can stay signed in. \nDo not allow stay signed in on shared computers \nA college lab computer should not keep students logged in after they leave  \nApp-Enforced Restrictions \nThis limits app behavior after login \nAllow viewing files but block download \nA company may allow guest users to view SharePoint documents but \nnot download them.  \nConditional Access is a smart security system that says: “Based on \nthe login situation, allow access, block access, or ask for extra \nverification.”"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 82,
+        "text": "4.4 Azure RBAC and Built-In Roles  \nAzure RBAC means Azure Role-Based Access Control.  \nAzure RBAC controls who can do what on Azure resources.  \nIt decides permissions for Azure resources like: \n●​ Virtual Machines \n●​ Storage Accounts \n●​ App Services \n●​ Databases \n●​ Resource Groups \n●​ Subscriptions \n●​ Key Vaults \n●​ VNets \nOne user can only view resources. \nAnother user can create and edit resources. \nAnother user can manage everything.  \n \n \nWhy Do We Need Azure RBAC? \nImagine everyone in a company has full access to Azure. \nThat is dangerous. \nA student, intern, or junior developer might accidentally: \n●​ delete a virtual machine \n●​ expose a database \n●​ change billing settings \n●​ stop a web app \n●​ delete storage files \nAzure RBAC prevents this by giving only the required permissions. \nThis is called least privilege.  \nGive users only the access they need, not more.  \nAzure RBAC is used in: \n●​ IT companies managing cloud resources \n●​ colleges giving students lab access \n●​ banks protecting production systems \n●​ hospitals protecting patient data systems \n●​ startups managing developer access \n●​ government departments controlling cloud permissions \nMain Idea of Azure RBAC  \nSecurity Principal + Role Definition + Scope = Role Assignment"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 83,
+        "text": "1. Security Principal \nA security principal means who gets access. \nIt can be: \n●​ user \n●​ group \n●​ service principal \n●​ managed identity \nSecurity principal = the person, group, or app receiving \npermissions. \nUser \nA user is one person.   \n Real life where it is used: A developer gets access to manage only the \ndevelopment App Service  \nGroup \nA group is a collection of users. \nReal life where it is used: \nA college creates a group called Azure Lab Students and gives that \ngroup Reader access to lab resources  \nService Principal \nA service principal is an identity for an application or automation tool. \nA GitHub Actions pipeline deploys code to Azure using a service principal  \nIn companies, CI/CD pipelines use service principals to deploy apps \nautomatically without using a human login.  \nManaged Identity \nA managed identity is an Azure-managed identity for an Azure resource. \nAn Azure App Service accesses Azure Storage using managed identity.  \nRole Definition  \nRole definition tells what actions are allowed.  \nScope \nScope means where the permission applies. \nAzure has different scope levels:"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 84,
+        "text": "4.​ Resource \nHigher scope means permission applies to everything below it."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 85,
+        "text": "1. Management Group Scope  \nUsed to manage many subscriptions together \nex) A large company has separate Azure subscriptions for HR, finance, \nproduction, and development. Management group helps control all of them.  \nSubscription Scope \nA subscription is a billing and resource boundary in Azure. \nIf you give access at subscription level, the user can access resources \ninside that subscription \nResource Group Scope  \nIf you give access at resource group level, the user can access only \nresources inside that resource group.  \nRole Assignment \nA role assignment connects: \n●​ who gets access \n●​ what role they get \n●​ where the role applies \nUser/Group + Role + Scope = Role Assignment \nSujay + Reader + rg-boutique-dev \nSujay can view resources only inside rg-boutique-dev.  \nBuilt-In Roles in Azure  \nOwner \nContributor \nReader \nUser Access Administrator"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 86,
+        "text": "1. Owner Role \nOwner has full access to manage resources and permissions. \nOwner can: \n●​ create resources \n●​ edit resources \n●​ delete resources \n●​ assign roles to others \n●​ remove access \n●​ manage everything in scope"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 87,
+        "text": "2. Contributor Role \nContributor can manage resources but cannot give access to others. \nContributor can: \n●​ create resources \n●​ edit resources \n●​ delete resources \nContributor cannot: \n●​ assign RBAC roles to users \n●​ give permissions to others"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 88,
+        "text": "3. Reader Role \nReader can only view resources. \nReader can: \n●​ see resources \n●​ view settings \n●​ check status \nReader cannot: \n●​ create resources \n●​ edit resources \n●​ delete resources \nA project mentor gets the Reader role to review your Azure setup safely."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 89,
+        "text": "4. User Access Administrator \nUser Access Administrator can manage user access to Azure resources. \nThey can: \n●​ assign roles \n●​ remove roles \n●​ manage access permissions \nBut they may not manage the actual resources unless they also have \nanother role \nUser Access Administrator = manages who gets access.  \nImagine a real fashion company using Azure. \nThey have: \n●​ owner \n●​ IT admin \n●​ web developer \n●​ designer \n●​ photographer \n●​ accountant \n●​ project mentor \nThey should not all have the same Azure access. \nThe owner and IT admin may have full control.​\nThe developer can update the website.​\nThe designer can view product images.​\nThe photographer can upload images.​\nThe accountant can view billing reports.​\nThe mentor can only view the project setup. \nAzure RBAC is used to give each person exactly the access needed."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 90,
+        "text": "4.5 Microsoft Defender for Cloud  \nMicrosoft Defender for Cloud is a security management and threat \nprotection service for Azure and cloud resources.  \nMicrosoft Defender for Cloud helps you find security problems, improve \nsecurity, and protect Azure resources from attacks.  \nit gives recommendations and alerts so you can fix security risks.  \nWhy Do We Need Microsoft Defender for Cloud?  \nWhen a company uses Azure, it may have many resources: \n●​ web apps \n●​ databases \n●​ storage accounts \n●​ virtual machines \n●​ networks \n●​ containers \nSecurity problems can happen, such as: \n●​ VM missing security updates \n●​ storage account open to public \n●​ weak network rules \n●​ no MFA for admins \n●​ database exposed to internet \nIt is difficult to check everything manually. \nMicrosoft Defender for Cloud continuously monitors your environment and \nwarns you. \nReal Life Where It Is Used \nMicrosoft Defender for Cloud is used by: \n●​ IT companies protecting Azure subscriptions \n●​ banks monitoring cloud workloads \n●​ hospitals protecting patient systems \n●​ colleges protecting student portals \n \nMain Topics in Microsoft Defender for Cloud  \nSecurity posture means the current security condition of your cloud \nenvironment.  \nSecurity posture tells how secure your Azure setup is.  \nA hospital checks whether patient databases, storage accounts, and \nservers are properly secured in Azure."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 91,
+        "text": "2. Secure Score \nSecure Score is a number that shows how secure your environment is. \nDefender gives recommendations to improve the score.  \nAn IT manager checks Secure Score every week to see whether the \ncompany’s Azure security is improving."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 92,
+        "text": "3. Security Recommendations \nDefender for Cloud gives recommendations to fix security issues. \nEnable MFA for admin accounts \nRestrict public access to storage \nInstall updates on VMs \nA college Azure admin gets a recommendation: “SSH port 22 is open to the \ninternet.” They restrict SSH access to only the college IP address."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 93,
+        "text": "4. Regulatory Compliance \nRegulatory compliance helps check whether your cloud setup follows \nsecurity standards. \nExamples of standards: \n●​ ISO 27001 \n●​ PCI DSS"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 94,
+        "text": "5. Threat Protection \nThreat protection means detecting real attacks or suspicious activity. \nExamples: \n●​ brute-force login attack on VM \n●​ malware detected \n●​ suspicious database access \n●​ unusual storage download \nAn e-commerce company receives an alert that someone is repeatedly \ntrying to log in to a VM using many passwords. Defender marks it as a \nbrute-force attack."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 95,
+        "text": "6. Security Alerts \nSecurity alerts are warnings about possible threats"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 96,
+        "text": "7. Defender Plans \nMicrosoft Defender for Cloud has protection plans for different resource \ntypes. \nDefender for Servers \nDefender for Storage \nDefender for SQL \nDefender for App Service \nImagine a real online shopping company using Azure. \nIt has: \n●​ website on App Service \n●​ product images in Storage \n●​ customer database in SQL \n●​ admin VM \n●​ secrets in Key Vault \nMicrosoft Defender for Cloud watches the environment. \nIt may warn: \n●​ “Your database is open to the public network.” \n●​ “A VM is missing security updates.” \n●​ “Suspicious login attempts detected.” \n●​ “Storage account had unusual file access.” \n●​ “SQL injection attempt detected.” \n●​ “Admin accounts should use MFA.” \nThe security team uses these alerts and recommendations to fix issues \nbefore they become serious."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 97,
+        "text": "4.6 Azure Key Vault Introduction  \nAzure Key Vault is a cloud service used to securely store and manage \nsensitive information. \nInstead of writing secrets directly inside code, you store them safely in Key \nVault.  \nWhy Do We Need Azure Key Vault? \nImagine you are building a boutique web app. \nYour app may need: \n●​ database password \n●​ payment gateway API key \n●​ email service password \n \ndatabase_password = \"Boutique@123\" \nIf this code goes to GitHub or is shared with teammates, the password can \nbe exposed. \nStore password in Azure Key Vault \nApp reads it securely when needed \nAn online shopping website stores its payment gateway API key in Azure \nKey Vault instead of keeping it inside the source code.  \nMain Things Stored in Azure Key Vault \nAzure Key Vault mainly stores three types of sensitive items:"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 98,
+        "text": "3.​ Certificates \nSecrets are private values your app needs but should not expose.  \nA boutique app stores the Azure SQL Database connection string in \nKey Vault so developers do not hardcode it in the app.  \nA key is used for encryption, decryption, signing, or verifying data.  \nKeys are used to lock and unlock data securely.  \nA bank uses encryption keys to protect customer transaction data. The \nkeys are stored and managed in Key Vault. \nCertificates help websites and apps communicate securely.  \nWhen you see this → https:// \nThe website is using a certificate."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 99,
+        "text": "1. Vault \nA vault is the main secure container where secrets, keys, and certificates \nare stored. \nSecret Name and Secret Value \nEach secret has a name and value. \nName: DatabasePassword \nValue: BoutiqueDB@123 \nYour app asks Key Vault for DatabasePassword, and Key Vault returns \nthe secret value if the app has permission.  \nSecret Versioning \nKey Vault keeps versions of secrets. \nIf you update a secret, Key Vault can keep the old version and new version. \nA company rotates database passwords every month. Key Vault keeps \nversions so admins can manage changes safely. \n Secret Rotation \nSecret rotation means changing secrets regularly. \nBanks and large companies rotate API keys and passwords regularly to \nreduce risk if an old secret is leaked.  \nSoft delete protects against accidental deletion. \nPurge protection stops someone from permanently deleting secrets \nimmediately  \nAudit logs are activity records for Key Vault.  \nHow Azure Key Vault Works With an App"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 100,
+        "text": "1.​ Store database password in Azure Key Vault."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 101,
+        "text": "2.​ Enable managed identity for App Service.(managed identity → no \nneed of password)"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 102,
+        "text": "3.​ Give App Service permission to read the secret."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 103,
+        "text": "5.​ Key Vault returns the secret securely."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 104,
+        "text": "6.​ App connects to the database. \nThe developer does not need to see or store the password in code. \nImagine a real online fashion store. \nIt has: \n●​ website \n●​ database \n●​ payment gateway \n●​ email service \n●​ storage for product images \n●​ admin login system \nThe app needs many sensitive values: \n●​ database password \n●​ payment API secret \n●​ email service key \n●​ encryption key \n●​ SSL certificate \nIf these are stored in code, they may leak through GitHub, screenshots, \nlogs, or developer laptops. \nSo the company stores them in the Azure Key Vault. \nOnly approved apps and admins can access them. Every access is logged. \nDeleted secrets can be recovered. Keys can be rotated regularly."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 105,
+        "text": "5.1 Azure Resource Manager and Resource Groups  \nThis topic has two main parts:"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 106,
+        "text": "2.​ Resource Groups \nAzure Resource Manager is the management system of Azure. \nResource Group is a folder-like container used to organize Azure \nresources.  \nAn Azure resource is anything you create and use in Azure.  \nA resource is one service/object you create in Azure.  \nIf your boutique app uses Azure App Service, Azure SQL Database, and \nStorage Account, each one is an Azure resource.  \nARM is the control system that creates, updates, organizes, and deletes \nAzure resources.  \nYou click Create Virtual Machine in Azure Portal.  \nAzure Portal -> Azure Resource Manager -> Create VM \nAzure Resource Manager helps with: \n●​ creating resources \n●​ updating resources \n●​ deleting resources \n●​ organizing resources \n●​ applying access control \n●​ applying tags \n●​ applying policies \n●​ deploying templates \n●​ tracking resource state"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 107,
+        "text": "3. Why Do We Need ARM? \nWithout a central manager, Azure resources would be difficult to control. \nImagine a company has: \n●​ 50 virtual machines \n●​ 20 storage accounts \n●​ 10 databases \n●​ 15 web apps \n●​ many networks \nARM gives one consistent management layer. \nIt helps admins answer: \n●​ Who created this resource? \n●​ Which resource group does it belong to? \n●​ Who has access? \n●​ What tags are applied? \n●​ What policies apply? \n●​ Can this user delete it? \n●​ Can we deploy the same setup again? \nA Resource Group is like a project folder for Azure resources. \nExample: \nFor your boutique app, you may create: \nResource Group: rg-boutique-app \nInside it: \n●​ App Service \n●​ Storage Account \n●​ SQL Database \n●​ Key Vault \n●​ Virtual Network \nAll resources related to the boutique app are kept together \nReal Life Where Resource Groups Are Used \nResource groups are used in almost every Azure project. \nExamples: \n●​ a college creates one resource group for each student project \n●​ a company creates one resource group for each application \n●​ a bank creates separate resource groups for dev, test, and production"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 108,
+        "text": "5. Why Resource Groups Are Important \nResource groups help with: \n●​ organization \n●​ billing view \n●​ access control \n●​ monitoring \n●​ lifecycle management \n●​ cleanup \n●​ deployment \n●​ policy management \nIf your project is over, you can delete the resource group and all resources \ninside it are deleted together. \nThat is very useful for labs and college projects. \nARM template lets you write your Azure setup in a file and deploy it \nrepeatedly.  \n \n \nInstead of manually creating: \n●​ App Service \n●​ Storage Account \n●​ Database \nyou define them in an ARM template and deploy everything together. \nTags help identify, organize, and track resources.  \nAzure locks protect resources from accidental deletion or modification. \nTypes:"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 109,
+        "text": "2.​ Read-only lock \nDelete Lock \nPrevents deleting the resource. \nReal life where it is used:​\nA production database gets a delete lock so nobody accidentally deletes it. \nRead-Only Lock \nPrevents changes to the resource. \nReal life where it is used:​\nA critical network configuration can be locked so users cannot modify it by \nmistake \nYou can apply Azure RBAC permissions at resource group level. \nAzure Policy with Resource Groups \nAzure Policy can enforce rules on resources. \nExamples: \n●​ only allow resources in Central India \n●​ require tags on every resource \n●​ block public IP creation \n●​ allow only certain VM sizes \nReal life where it is used:​\nA company applies policy so developers cannot create expensive VM sizes \nin student or test subscriptions. \nUser -> Azure Portal/CLI -> ARM -> Resource Provider -> Resource \nCreated \n \nboutique and fashion design app, create: \nResource Group: rg-boutique-dev \nInside it: \n●​ Azure App Service for your web app \n●​ Storage Account for dress images \n●​ SQL Database for customer bookings \n●​ Key Vault for passwords/API keys \n●​ Application Insights for monitoring \nTags: \nProject = BoutiqueApp \nEnvironment = Development \nOwner = Sujay \nRBAC: \nYou: Owner \nTeammate developer: Contributor \nProject guide: Reader \nThis is clean, organized, and safe."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 110,
+        "text": "5.2 Azure Policy and Initiatives  \nAzure Policy checks whether Azure resources follow company rules.  \nWithout rules, people may create: \n●​ expensive virtual machines \n●​ resources in wrong regions \n●​ storage accounts open to public \nWithout rules, people may create: \n●​ expensive virtual machines \n●​ resources in wrong regions \n●​ storage accounts open to public \nAzure Policy prevents or detects these problems. \n \nIf someone tries to create a public IP, Azure blocks it.  \nAudit allows the action but marks it as non-compliant.  \nAzure does not block the VM, but reports it.  \nAppend adds extra properties during resource creation.  \nModify changes or add settings on resources.  \nDeployIfNotExists deploys something if it is missing. \nIf VM does not have monitoring agent, install it \nA college gives Azure access to students. \nThe college applies policies: \n●​ only allow Central India region \n●​ block expensive VM sizes \n●​ require student name/project tag \n●​ deny public IP creation unless approved \n●​ auto-enable monitoring \n●​ audit storage accounts with public access \nResult: \nStudents can learn Azure safely without creating costly or risky resources. \nAzure Policy is Azure’s rule system. It makes sure resources follow \norganization rules for security, cost, location, naming, tagging, and \ncompliance. An initiative is a group of policies applied together.  \nImagine a real fashion e-commerce company opens new online stores \nfor different regions. \nFor every region, they need the same Azure setup: \n●​ web app \n●​ database \n●​ storage \n●​ key vault \n●​ monitoring \n●​ security policies \n●​ developer access \n●​ manager read-only access \nInstead of creating everything manually, the cloud team creates one \nblueprint. \nEvery new project gets the same secure setup automatically. \n \nAzure Blueprints is a reusable governance plan that packages Azure \nresources, policies, permissions, and resource groups together so \norganizations can create standard, secure, repeatable Azure environments."
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 111,
+        "text": "5.4 Microsoft Cost Management and Billing \nMicrosoft Cost Management and Billing is the Azure service used to \ntrack, analyze, control, and pay for Azure costs. \nCost Management and Billing helps you understand how much money your \nAzure resources are using and how to control that cost.   \nYou pay based on what you use.  \nIf you create resources and forget to stop/delete them, cost may continue \nincreasing.  \nA college gives students Azure access but sets budget alerts so students \ndo not accidentally consume all credits.  \nBilling account is where Azure payment and invoice information is \nmanaged.  \nAn invoice is the bill generated by Microsoft for Azure usage.  \nSubscription is the billing container for Azure usage.  \nImagine a real fashion e-commerce company runs its website on Azure. \nIt uses: \n●​ App Service for website \n●​ SQL Database for orders \n●​ Storage for product images \n●​ Key Vault for secrets \n●​ Monitoring logs \n●​ Virtual Machines for admin tools \nAt the end of the month, the finance team wants to know: \n●​ total Azure bill \n●​ which project spent the most \n●​ which department used more resources \n●​ whether cost crossed budget \n●​ which resources are unused \n●​ how to reduce cost next month \nMicrosoft Cost Management and Billing helps them see all this. \nThey use: \n●​ Cost Analysis to inspect spending \n●​ Budgets to get alerts \n●​ Tags to track project/team cost \n●​ Invoices for payment records \n●​ Advisor recommendations to reduce waste \n●​ Reservations/Savings Plans for long-term savings"
+    },
+    {
+        "document": "microsoft azure fundamentals",
+        "clause_id": 112,
+        "text": "5.5 Azure Monitor and Service Health  \nAzure Monitor helps you know what is happening inside your Azure \nresources and apps.  \nMetrics are numerical performance values collected over time.  \nMetrics are numbers that show resource performance. \nMonitoring can help Azure scale resources based on demand.   \nAzure Service Health  \nAzure Service Health tells whether Azure itself has a problem.  \n \nService \nWatches \nAzure Monitor \nYour resources \nand apps \nAzure Service \nHealth \nAzure \nplatform/services \nYour App Service CPU is high: Azure Monitor.​\nAzure App Service in Central India has an outage: Service Health. \nA company checks Service Health when many apps suddenly fail and \nsuspects an Azure regional problem. \nImagine a real fashion e-commerce company runs a website on Azure. \nOne day customers complain that checkout is not working. \nThe team checks Azure Monitor: \n●​ App Service CPU is normal \n●​ database CPU is normal \n●​ logs show no code errors \n●​ storage is working \nThen they check Azure Service Health: \n●​ Azure SQL Database has an issue in their region \nNow they know the problem is not their code. It is an Azure platform issue. \nAnother day, the website is slow. \nThey check Azure Monitor: \n●​ App Service CPU is 95% \n●​ response time is high \n●​ many requests are coming due to sale \nNow they know the problem is traffic, so they scale the app. \n \nWhy Do We Need Azure Advisor? \nWhen you create Azure resources, you may not always configure them \nperfectly. \nCommon problems: \n●​ VM is too large and wasting money \n●​ database is underused \n●​ backup is not enabled \n●​ public IP is exposed \n A company has a VM running 24/7 but CPU usage is only 3%. Azure \nAdvisor recommends resizing or shutting it down to save cost.  \nCost recommendations help you avoid wasting money.  \nSecurity recommendations help reduce risk. \nReliability recommendations help prevent downtime and data loss.  \nPerformance recommendations help improve speed.  \nOperational excellence helps run Azure resources properly day to day  \nThe Advisor dashboard shows all recommendations in one place. \nYou can filter by: \n●​ subscription \n●​ resource group \n●​ category \n●​ impact \n●​ resource type \nService \nPurpose \nDefender for \nCloud \nSecurity posture and threat \nprotection \nAzure Advisor \nOverall best-practice \nrecommendations \n \nImagine a real fashion e-commerce company runs its website on Azure. \nIt has: \n●​ web app \n●​ database \n●​ storage \n●​ virtual machines \n●​ monitoring \n●​ key vault \nThe company wants to know: \n●​ Are we wasting money? \n●​ Are resources secure? \n●​ Will the website stay available? \n●​ Is performance good? \n●​ Are we following best practices? \nAzure Advisor checks the environment and says: \n●​ resize underused VMs \n●​ delete unused disks \n●​ enable backup \n●​ restrict public access \n●​ enable monitoring \n●​ scale App Service \n●​ use reservations for long-running resources \nThe cloud team reviews these recommendations weekly and improves the \nAzure environment. \n \n \n​\n​\n                 ​The end"
+    }
+]
