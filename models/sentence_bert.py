@@ -3,15 +3,18 @@ import json
 import numpy as np
 import streamlit as st
 
-from sentence_transformers import SentenceTransformer
-
-
 # --------------------------------------------------
 # Load Model Only Once
 # --------------------------------------------------
 
 @st.cache_resource
 def load_model():
+    from sentence_transformers import SentenceTransformer
+
+    os.environ.setdefault(
+        "TOKENIZERS_PARALLELISM",
+        "false"
+    )
 
     return SentenceTransformer(
         "all-MiniLM-L6-v2"

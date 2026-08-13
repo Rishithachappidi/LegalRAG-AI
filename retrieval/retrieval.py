@@ -2,17 +2,17 @@ import json
 import faiss
 import numpy as np
 
-from sentence_transformers import SentenceTransformer
+from models.sentence_bert import load_model
 
 
 class Retriever:
 
     def __init__(self):
 
-        # Load the same Sentence-BERT model
-        self.model = SentenceTransformer(
-            "all-MiniLM-L6-v2"
-        )
+        # Reuse the same Sentence-BERT model for query embedding
+        self.model = load_model()
+        self._index_cache = {}
+        self._metadata_cache = {}
 
     def search(
         self,
@@ -23,10 +23,18 @@ class Retriever:
     ):
 
         # ------------------------
-        # Load FAISS index
+        # Load FAISS index and metadata once per path
         # ------------------------
 
-        index = faiss.read_index(index_path)
+        if index_path not in self._index_cache:
+            self._index_cache[index_path] = faiss.read_index(index_path)
+
+        if metadata_path not in self._metadata_cache:
+            with open(metadata_path, encoding="utf-8") as f:
+                self._metadata_cache[metadata_path] = json.load(f)
+
+        index = self._index_cache[index_path]
+        metadata = self._metadata_cache[metadata_path]
 
         # ------------------------
         # Query Embedding

@@ -2,6 +2,7 @@ import os
 import json
 import numpy as np
 import streamlit as st
+from dotenv import load_dotenv
 
 from preprocessing.pdf_extractor import PDFExtractor
 from preprocessing.clause_chunker import ClauseChunker
@@ -34,18 +35,70 @@ os.makedirs("embeddings", exist_ok=True)
 # Initialize Modules
 # -------------------------------------------------------
 
+load_dotenv()
+
 pdf_extractor = PDFExtractor()
 chunker = ClauseChunker()
 embedding_model = SentenceBERT()
 retriever = Retriever()
 dcbd = DCBD()
 faiss_manager = FAISSManager()
-llama = LlamaManager()
 validator = RelevanceValidator()
+
+llama = None
+llm_mode = None
+try:
+    llama = LlamaManager()
+    llm_mode = getattr(llama, "mode", None)
+    if llm_mode == "groq":
+        st.success("LLM initialized with GROQ API key.")
+    elif llm_mode == "local":
+        st.success("LLM initialized with local transformers fallback.")
+    else:
+        st.warning(
+            f"LLM initialization failed: {getattr(llama, 'error', 'unknown error')}. "
+            "Install transformers & torch or set GROQ_API_KEY."
+        )
+except Exception as exc:
+    st.warning(
+        f"LLM initialization failed: {exc}. "
+        "Install transformers & torch or set GROQ_API_KEY."
+    )
 
 faithfulness_evaluator = FaithfulnessEvaluator(
     embedding_model
 )
+
+
+def build_fallback_report(question, selected_clauses):
+    header = (
+        "### Legal Analysis Report (Fallback)\n"
+        "_Generated from retrieved clauses only; no external LLM used._\n\n"
+    )
+    findings = []
+    if not selected_clauses:
+        return (
+            header +
+            "No supporting clauses were selected. Please upload relevant PDF documents and ask a question related to them."
+        )
+
+    for clause in selected_clauses:
+        findings.append(
+            f"Clause {clause['clause_id']} ({clause['document']}): {clause['text']}"
+        )
+
+    report = (
+        header +
+        "**Question:** " + question + "\n\n"
+        "**Key clause summaries:**\n"
+    )
+    report += "\n\n".join(findings[:5])
+    report += (
+        "\n\n**Conclusion:** The answer above is derived directly from the retrieved legal clauses. "
+        "If these clauses are insufficient to answer the question fully, consult the original documents or enable GROQ_API_KEY for an LLM-generated analysis."
+    )
+    return report
+
 
 # -------------------------------------------------------
 # UI
@@ -278,7 +331,7 @@ if st.button("🔍 Search"):
             query,
             index_path,
             metadata_path,
-            top_k=10
+            top_k=5
         )
 
         all_results.extend(results)
@@ -358,147 +411,124 @@ if st.button("🔍 Search"):
 
     st.subheader("📑 Legal Analysis Report")
 
-    with st.spinner("Generating legal report..."):
+    report_generated = False
+    report = ""
 
-        report = llama.generate_answer(
-            question=query,
-            selected_clauses=selected
+    if llama is None or llm_mode is None:
+        st.warning(
+            "No LLM is available. Install transformers & torch or set GROQ_API_KEY."
         )
+        st.info(
+            "To enable LLM-based report generation, either add GROQ_API_KEY to .env "
+            "or install transformers and torch for local fallback."
+        )
+    else:
+        with st.spinner("Generating legal report..."):
+            report = llama.generate_answer(
+                question=query,
+                selected_clauses=selected
+            )
+            report_generated = True
 
     # ----------------------------------------
     # Display LLaMA Report
     # ----------------------------------------
 
-    st.markdown(report)
+    if report_generated:
+        st.markdown(report)
+    else:
+        report = build_fallback_report(
+            query,
+            selected
+        )
+        st.markdown(report)
 
     # ----------------------------------------
     # Overall LLM Evaluation
     # ----------------------------------------
 
-    evaluation = faithfulness_evaluator.evaluate(
-        answer=report,
-        selected_clauses=selected
-    )
-
-    # ----------------------------------------
-    # Get Evaluation Values Safely
-    # ----------------------------------------
-
-    faithfulness_score = float(
-        evaluation.get(
-            "faithfulness_score",
-            0.0
-        )
-    )
-
-    semantic_similarity = float(
-        evaluation.get(
-            "semantic_similarity",
-            faithfulness_score / 100.0
-        )
-    )
-
-    # ----------------------------------------
-    # Calculate Hallucination Risk
-    # ----------------------------------------
-
-    hallucination_rate = max(
-        0.0,
-        min(
-            100.0 - faithfulness_score,
-            100.0
-        )
-    )
-
-    # ----------------------------------------
-    # Overall Assessment
-    # ----------------------------------------
-
-    answer_quality = evaluation.get(
-        "answer_quality",
-        "Evaluation completed"
-    )
-
-    # ----------------------------------------
-    # Evaluation Results
-    # ----------------------------------------
-
-    st.markdown("---")
-
-    st.subheader(
-        "🛡️ Overall LLM Answer Evaluation"
-    )
-
-    col1, col2, col3 = st.columns(3)
-
-    # ----------------------------------------
-    # Faithfulness
-    # ----------------------------------------
-
-    with col1:
-
-        st.metric(
-            "Faithfulness Score",
-            f"{faithfulness_score:.2f}%"
+    if report_generated:
+        evaluation = faithfulness_evaluator.evaluate(
+            answer=report,
+            selected_clauses=selected
         )
 
-    # ----------------------------------------
-    # Hallucination
-    # ----------------------------------------
-
-    with col2:
-
-        st.metric(
-            "Estimated Hallucination Risk",
-            f"{hallucination_rate:.2f}%"
+        faithfulness_score = float(
+            evaluation.get(
+                "faithfulness_score",
+                0.0
+            )
         )
 
-    # ----------------------------------------
-    # Semantic Similarity
-    # ----------------------------------------
-
-    with col3:
-
-        st.metric(
-            "Answer-Context Similarity",
-            f"{semantic_similarity:.4f}"
+        semantic_similarity = float(
+            evaluation.get(
+                "semantic_similarity",
+                faithfulness_score / 100.0
+            )
         )
 
-    # ----------------------------------------
-    # Overall Assessment
-    # ----------------------------------------
+        hallucination_rate = max(
+            0.0,
+            min(
+                100.0 - faithfulness_score,
+                100.0
+            )
+        )
 
-    st.info(
-        f"📊 Overall Assessment: "
-        f"{answer_quality}"
-    )
+        answer_quality = evaluation.get(
+            "answer_quality",
+            "Evaluation completed"
+        )
 
-    # ----------------------------------------
-    # Download Report
-    # ----------------------------------------
+        st.markdown("---")
 
-    st.download_button(
+        st.subheader(
+            "🛡️ Overall LLM Answer Evaluation"
+        )
 
-        label="📥 Download Legal Report (.txt)",
+        col1, col2, col3 = st.columns(3)
 
-        data=(
-            "LEGAL ANALYSIS REPORT\n\n"
-            f"Question:\n{query}\n\n"
-            f"Answer:\n{report}\n\n"
-            "--------------------------------\n"
-            "OVERALL EVALUATION\n"
-            "--------------------------------\n"
-            f"Faithfulness Score: "
-            f"{faithfulness_score:.2f}%\n"
-            f"Estimated Hallucination Risk: "
-            f"{hallucination_rate:.2f}%\n"
-            f"Answer-Context Similarity: "
-            f"{semantic_similarity:.4f}\n"
-            f"Overall Assessment: "
-            f"{answer_quality}\n"
-        ),
+        with col1:
+            st.metric(
+                "Faithfulness Score",
+                f"{faithfulness_score:.2f}%"
+            )
 
-        file_name="legal_analysis_report.txt",
+        with col2:
+            st.metric(
+                "Estimated Hallucination Risk",
+                f"{hallucination_rate:.2f}%"
+            )
 
-        mime="text/plain"
-    )
+        with col3:
+            st.metric(
+                "Answer-Context Similarity",
+                f"{semantic_similarity:.4f}"
+            )
+
+        st.info(
+            f"📊 Overall Assessment: {answer_quality}"
+        )
+
+        st.download_button(
+            label="📥 Download Legal Report (.txt)",
+            data=(
+                "LEGAL ANALYSIS REPORT\n\n"
+                f"Question:\n{query}\n\n"
+                f"Answer:\n{report}\n\n"
+                "--------------------------------\n"
+                "OVERALL EVALUATION\n"
+                "--------------------------------\n"
+                f"Faithfulness Score: {faithfulness_score:.2f}%\n"
+                f"Estimated Hallucination Risk: {hallucination_rate:.2f}%\n"
+                f"Answer-Context Similarity: {semantic_similarity:.4f}\n"
+                f"Overall Assessment: {answer_quality}\n"
+            ),
+            file_name="legal_analysis_report.txt",
+            mime="text/plain"
+        )
+    else:
+        st.markdown("---")
+        st.info(
+            "Legal evaluation is disabled until report generation is enabled."
+        )

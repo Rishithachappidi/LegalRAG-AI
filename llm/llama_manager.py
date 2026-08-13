@@ -1,66 +1,259 @@
 import os
-from dotenv import load_dotenv
-from groq import Groq
 
-load_dotenv()
 
 class LlamaManager:
 
     def __init__(self):
-        api_key = os.getenv("GROQ_API_KEY")
-        if not api_key:
-            raise ValueError("GROQ_API_KEY is not set in the environment.")
 
-        self.client = Groq(
-            api_key=api_key
+        self.api_key = os.getenv("GROQ_API_KEY")
+
+        self.mode = None
+        self.error = None
+
+        # -----------------------------------------
+        # GROQ
+        # -----------------------------------------
+
+        if self.api_key:
+
+            try:
+
+                from groq import Groq
+
+                self.client = Groq(
+                    api_key=self.api_key
+                )
+
+                self.mode = "groq"
+
+                self.model = "llama-3.1-8b-instant"
+
+                return
+
+            except Exception as exc:
+
+                self.error = (
+                    f"Failed to initialize GROQ client: {exc}"
+                )
+
+        # -----------------------------------------
+        # LOCAL LLM
+        # -----------------------------------------
+
+        try:
+
+            from transformers import (
+                AutoModelForCausalLM,
+                AutoTokenizer,
+                pipeline
+            )
+
+            import torch
+
+        except ImportError:
+
+            self.error = (
+                "GROQ_API_KEY is not set and local "
+                "transformers are unavailable. "
+                "Install transformers and torch, "
+                "or set GROQ_API_KEY."
+            )
+
+            return
+
+        model_name = os.getenv(
+            "LOCAL_LLM_MODEL",
+            "distilgpt2"
         )
-        self.model = "llama-3.3-70b-versatile"
 
-    def generate_answer(self, question, selected_clauses):
+        try:
+
+            self.tokenizer = AutoTokenizer.from_pretrained(
+                model_name
+            )
+
+            self.model = AutoModelForCausalLM.from_pretrained(
+                model_name
+            )
+
+            self.generator = pipeline(
+                "text-generation",
+                model=self.model,
+                tokenizer=self.tokenizer,
+                device=(
+                    0
+                    if torch.cuda.is_available()
+                    else -1
+                )
+            )
+
+            self.mode = "local"
+
+        except Exception as exc:
+
+            self.error = (
+                f"Failed to initialize local transformer "
+                f"model '{model_name}': {exc}"
+            )
+
+    # =====================================================
+    # BUILD LEGAL PROMPT
+    # =====================================================
+
+    def _build_prompt(
+        self,
+        question,
+        selected_clauses
+    ):
+
         context = ""
+
         for clause in selected_clauses:
-            context += f"--- Clause ID: {clause['clause_id']} (Doc: {clause['document']}) ---\n{clause['text']}\n\n"
+
+            context += (
+                f"--- Clause ID: "
+                f"{clause['clause_id']} "
+                f"(Document: {clause['document']}) ---\n"
+                f"{clause['text']}\n\n"
+            )
 
         prompt = f"""
-You are an expert Legal AI Analyst. 
+You are an expert Legal AI Analyst.
 
-Your task is to analyze ALL provided legal clauses below and produce a comprehensive, detailed legal report answering the user's question.
+You must answer the user's legal question using ONLY
+the legal clauses provided in the context.
 
-CRITICAL INSTRUCTIONS:
-1. Examine EVERY clause provided in the context. Do not rely on just one clause.
-2. Cross-reference related clauses to build a complete analysis.
-3. Cite specific Clause IDs (e.g., [Clause 1], [Clause 3]) wherever relevant.
-4. Structure the response professionally into clear sections:
-   - Executive Summary
-   - Detailed Legal Findings (Referencing all relevant clauses)
-   - Synthesis & Conclusion
-5. If the uploaded legal clauses do not contain sufficient information to answer the question, state explicitly:
-   "The uploaded legal documents do not contain sufficient information to answer this question."
+Do not invent legal provisions, facts, dates, penalties,
+rights, obligations, or interpretations that are not
+supported by the provided clauses.
 
-------------------------
-RELEVANT LEGAL CLAUSES
-------------------------
-{context}
+Analyze ALL provided clauses and cross-reference them
+where necessary.
 
-------------------------
-USER QUESTION
-------------------------
+USER QUESTION:
 {question}
 
-------------------------
-LEGAL REPORT
-------------------------
+RELEVANT LEGAL CLAUSES:
+{context}
+
+Prepare a COMPLETE and DETAILED legal analysis.
+
+Use the following structure:
+
+1. Executive Summary
+Provide a direct answer to the user's question.
+
+2. Relevant Legal Provisions
+Identify the clauses that are relevant to the question.
+Cite their Clause IDs.
+
+3. Detailed Legal Analysis
+Explain what each relevant clause means in relation to
+the user's question.
+Cross-reference clauses where they are connected.
+
+4. Synthesis
+Combine the relevant provisions and explain how they
+work together.
+
+5. Limitations
+Clearly mention if the provided documents do not contain
+enough information to answer any part of the question.
+
+6. Conclusion
+Provide a clear final conclusion based only on the
+uploaded legal documents.
+
+IMPORTANT:
+- Examine every provided clause.
+- Do not ignore relevant clauses.
+- Cite Clause IDs such as [Clause 1] or [Clause 3].
+- Do not use outside legal knowledge.
+- Do not fabricate information.
+- If the documents do not contain enough information,
+  explicitly state that.
+
+LEGAL ANALYSIS:
 """
 
-        response = self.client.chat.completions.create(
-            model=self.model,
-            messages=[
-                {
-                    "role": "user",
-                    "content": prompt
-                }
-            ],
-            temperature=0.2
+        return prompt
+
+    # =====================================================
+    # GENERATE ANSWER
+    # =====================================================
+
+    def generate_answer(
+        self,
+        question,
+        selected_clauses
+    ):
+
+        prompt = self._build_prompt(
+            question,
+            selected_clauses
         )
 
-        return response.choices[0].message.content
+        # -----------------------------------------
+        # GROQ
+        # -----------------------------------------
+
+        if self.mode == "groq":
+
+            response = self.client.chat.completions.create(
+
+                model=self.model,
+
+                messages=[
+                    {
+                        "role": "user",
+                        "content": prompt
+                    }
+                ],
+
+                temperature=0.1,
+
+                max_completion_tokens=1000,
+
+                top_p=0.9
+            )
+
+            return response.choices[0].message.content
+
+        # -----------------------------------------
+        # LOCAL MODEL
+        # -----------------------------------------
+
+        if self.mode == "local":
+
+            result = self.generator(
+
+                prompt,
+
+                max_new_tokens=700,
+
+                do_sample=True,
+
+                temperature=0.7,
+
+                top_p=0.9,
+
+                num_return_sequences=1
+            )
+
+            generated_text = result[0][
+                "generated_text"
+            ]
+
+            # Remove prompt from generated result
+            if generated_text.startswith(prompt):
+
+                generated_text = generated_text[
+                    len(prompt):
+                ]
+
+            return generated_text.strip()
+
+        raise ValueError(
+            self.error or
+            "Unsupported LLM mode."
+        )
