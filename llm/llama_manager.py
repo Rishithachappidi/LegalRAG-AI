@@ -1,18 +1,36 @@
 import os
 
+from dotenv import load_dotenv
+
+# ============================================================
+# LOAD ENVIRONMENT VARIABLES
+# ============================================================
+
+load_dotenv()
+
 
 class LlamaManager:
 
     def __init__(self):
+
+        # ====================================================
+        # INITIAL STATE
+        # ====================================================
 
         self.api_key = os.getenv("GROQ_API_KEY")
 
         self.mode = None
         self.error = None
 
-        # -----------------------------------------
+        self.client = None
+        self.model = None
+
+        self.tokenizer = None
+        self.generator = None
+
+        # ====================================================
         # GROQ
-        # -----------------------------------------
+        # ====================================================
 
         if self.api_key:
 
@@ -24,9 +42,10 @@ class LlamaManager:
                     api_key=self.api_key
                 )
 
-                self.mode = "groq"
+                # Current Groq model
+                self.model = "openai/gpt-oss-120b"
 
-                self.model = "llama-3.1-8b-instant"
+                self.mode = "groq"
 
                 return
 
@@ -36,9 +55,18 @@ class LlamaManager:
                     f"Failed to initialize GROQ client: {exc}"
                 )
 
-        # -----------------------------------------
-        # LOCAL LLM
-        # -----------------------------------------
+                self.mode = None
+
+        else:
+
+            self.error = (
+                "GROQ_API_KEY is not set. "
+                "Please add GROQ_API_KEY to your .env file."
+            )
+
+        # ====================================================
+        # LOCAL LLM FALLBACK
+        # ====================================================
 
         try:
 
@@ -51,13 +79,6 @@ class LlamaManager:
             import torch
 
         except ImportError:
-
-            self.error = (
-                "GROQ_API_KEY is not set and local "
-                "transformers are unavailable. "
-                "Install transformers and torch, "
-                "or set GROQ_API_KEY."
-            )
 
             return
 
@@ -89,6 +110,8 @@ class LlamaManager:
 
             self.mode = "local"
 
+            self.error = None
+
         except Exception as exc:
 
             self.error = (
@@ -96,91 +119,205 @@ class LlamaManager:
                 f"model '{model_name}': {exc}"
             )
 
-    # =====================================================
-    # BUILD LEGAL PROMPT
-    # =====================================================
+
+    # ============================================================
+    # BUILD QUESTION-AWARE LEGAL PROMPT
+    # ============================================================
 
     def _build_prompt(
         self,
         question,
         selected_clauses
     ):
+        """
+        Build a question-adaptive prompt.
 
-        context = ""
+        The response style is determined by the user's question:
+        - summarize / summary -> detailed prose summary
+        - explain / meaning -> clear explanation
+        - simple factual question -> direct concise answer
+        - compare -> comparison
+        - list / enumerate -> list only when requested
+        - detailed / analyze -> detailed analysis
+        - otherwise -> natural answer based on the question
 
-        for clause in selected_clauses:
+        All factual/legal content must come only from the retrieved clauses.
+        """
 
-            context += (
-                f"--- Clause ID: "
-                f"{clause['clause_id']} "
-                f"(Document: {clause['document']}) ---\n"
-                f"{clause['text']}\n\n"
-            )
+        if not selected_clauses:
+            return f"""
+You are a Legal Document Question Answering AI.
 
-        prompt = f"""
-You are an expert Legal AI Analyst.
-
-You must answer the user's legal question using ONLY
-the legal clauses provided in the context.
-
-Do not invent legal provisions, facts, dates, penalties,
-rights, obligations, or interpretations that are not
-supported by the provided clauses.
-
-Analyze ALL provided clauses and cross-reference them
-where necessary.
-
-USER QUESTION:
+The user asked:
 {question}
 
-RELEVANT LEGAL CLAUSES:
+No relevant clauses were retrieved from the uploaded document.
+
+Tell the user clearly that the available document context does not
+contain enough information to answer the question.
+
+Do not use outside legal knowledge.
+Do not invent information.
+"""
+
+        context_parts = []
+
+        for clause in selected_clauses:
+            clause_id = clause.get("clause_id", "Unknown")
+            document = clause.get("document", "Unknown Document")
+            text = clause.get("text", "")
+
+            context_parts.append(
+                f"""
+--- Clause ID: {clause_id} ---
+Document: {document}
+
+{text}
+"""
+            )
+
+        context = "\n".join(context_parts)
+
+        prompt = f"""
+You are a document-grounded Legal Question Answering AI.
+
+Your job is to answer the USER QUESTION naturally and appropriately
+using ONLY the RETRIEVED LEGAL DOCUMENT CONTEXT below.
+
+Do NOT give every answer in bullet points.
+Do NOT force every answer into a fixed report structure.
+Do NOT automatically create sections such as Executive Summary,
+Relevant Provisions, Detailed Analysis, Synthesis, or Conclusion.
+
+Instead, understand what the user is asking and choose the response
+style that best fits the question.
+
+============================================================
+USER QUESTION
+============================================================
+
+{question}
+
+============================================================
+RETRIEVED LEGAL DOCUMENT CONTEXT
+============================================================
+
 {context}
 
-Prepare a COMPLETE and DETAILED legal analysis.
+============================================================
+HOW TO ANSWER
+============================================================
 
-Use the following structure:
+1. FOLLOW THE USER'S INTENT
 
-1. Executive Summary
-Provide a direct answer to the user's question.
+If the user asks for a SUMMARY or asks to "summarize":
+- Provide a reasonably detailed summary of the relevant document content.
+- Cover the important points, conditions, rights, duties, restrictions,
+  procedures, exceptions, consequences, and other relevant information
+  present in the retrieved clauses.
+- Use connected paragraphs where appropriate.
+- You may use a small number of headings or bullets when they genuinely
+  improve readability.
+- Do not make the summary unnecessarily short.
 
-2. Relevant Legal Provisions
-Identify the clauses that are relevant to the question.
-Cite their Clause IDs.
+If the user asks a SIMPLE FACTUAL QUESTION:
+- Answer directly.
+- Keep the answer concise but complete.
+- Explain the answer briefly when useful.
+- Do not produce a long report.
 
-3. Detailed Legal Analysis
-Explain what each relevant clause means in relation to
-the user's question.
-Cross-reference clauses where they are connected.
+If the user asks "WHAT DOES THIS MEAN?", "EXPLAIN", or asks to explain
+a clause:
+- Explain the relevant provision in clear, easy-to-understand language.
+- Include the important conditions and consequences.
+- Do not merely repeat the clause word-for-word.
+- Give enough detail to make the provision understandable.
 
-4. Synthesis
-Combine the relevant provisions and explain how they
-work together.
+If the user asks for a DETAILED EXPLANATION or ANALYSIS:
+- Give a more comprehensive answer.
+- Explain the relevant provisions and how they relate to the question.
+- Distinguish explicit statements from reasonable interpretation.
 
-5. Limitations
-Clearly mention if the provided documents do not contain
-enough information to answer any part of the question.
+If the user asks a YES/NO question:
+- Start with Yes, No, or "The document does not provide enough
+  information."
+- Then explain why using the relevant clauses.
 
-6. Conclusion
-Provide a clear final conclusion based only on the
-uploaded legal documents.
+If the user asks to COMPARE provisions:
+- Compare the relevant clauses clearly.
+- Explain similarities, differences, and how they interact.
+- Use a table only if it genuinely improves the comparison.
 
-IMPORTANT:
-- Examine every provided clause.
-- Do not ignore relevant clauses.
-- Cite Clause IDs such as [Clause 1] or [Clause 3].
-- Do not use outside legal knowledge.
-- Do not fabricate information.
-- If the documents do not contain enough information,
-  explicitly state that.
+If the user asks for a LIST, STEPS, CONDITIONS, RIGHTS, DUTIES,
+or other enumerated information:
+- Use bullets or numbered points because the user explicitly requested
+  that format.
 
-LEGAL ANALYSIS:
+If the question is conversational or asks something specific:
+- Respond naturally rather than using a predetermined template.
+
+============================================================
+DOCUMENT-GROUNDING RULES
+============================================================
+
+- Use ONLY the retrieved document context.
+- Do NOT use outside legal knowledge.
+- Do NOT invent laws, rules, penalties, dates, names, rights,
+  obligations, exceptions, procedures, or facts.
+- If the context does not contain enough information, say so clearly.
+- Do not pretend that an inference is explicitly stated in the document.
+- You may explain an inference, but clearly indicate that it is an
+  interpretation based on the provided text.
+
+============================================================
+CLAUSE CITATIONS
+============================================================
+
+Support important legal statements with the actual Clause ID.
+
+Use citations such as:
+[Clause 1]
+[Clause 3]
+[Clause 2] and [Clause 5]
+
+Only use Clause IDs that actually appear in the retrieved context.
+Never invent a Clause ID.
+
+============================================================
+STYLE
+============================================================
+
+- Write naturally and professionally.
+- Prefer paragraphs for explanations and summaries.
+- Use bullets only when they improve the answer or the user asks for them.
+- Do not repeat the same information.
+- Do not be unnecessarily verbose for simple questions.
+- Do not be unnecessarily brief for summaries or detailed questions.
+- Match the amount of detail to the user's request.
+
+============================================================
+LEGAL DISCLAIMER
+============================================================
+
+You are a document-grounded legal information assistant.
+You are not a lawyer.
+Do not claim that your response constitutes professional legal advice.
+
+============================================================
+FINAL TASK
+============================================================
+
+Answer the USER QUESTION now.
+
+LEGAL ANSWER:
 """
 
         return prompt
 
-    # =====================================================
+
+    # ============================================================
     # GENERATE ANSWER
-    # =====================================================
+    # ============================================================
 
     def generate_answer(
         self,
@@ -188,72 +325,142 @@ LEGAL ANALYSIS:
         selected_clauses
     ):
 
+        # --------------------------------------------------------
+        # Build question-aware prompt
+        # --------------------------------------------------------
+
         prompt = self._build_prompt(
             question,
             selected_clauses
         )
 
-        # -----------------------------------------
+        # ========================================================
         # GROQ
-        # -----------------------------------------
+        # ========================================================
 
         if self.mode == "groq":
 
-            response = self.client.chat.completions.create(
+            try:
 
-                model=self.model,
+                response = self.client.chat.completions.create(
 
-                messages=[
-                    {
-                        "role": "user",
-                        "content": prompt
-                    }
-                ],
+                    model=self.model,
 
-                temperature=0.1,
+                    messages=[
+                        {
+                            "role": "system",
+                            "content": (
+                                "You are a document-grounded "
+                                "legal question answering assistant. "
+                                "You must answer using only the "
+                                "retrieved legal document clauses."
+                            )
+                        },
+                        {
+                            "role": "user",
+                            "content": prompt
+                        }
+                    ],
 
-                max_completion_tokens=1000,
+                    temperature=0.1,
 
-                top_p=0.9
-            )
+                    max_completion_tokens=4000,
 
-            return response.choices[0].message.content
+                    top_p=0.9,
 
-        # -----------------------------------------
+                    stream=False
+                )
+
+                # ------------------------------------------------
+                # Safely extract response
+                # ------------------------------------------------
+
+                if (
+                    response.choices
+                    and response.choices[0].message
+                ):
+
+                    answer = (
+                        response
+                        .choices[0]
+                        .message
+                        .content
+                    )
+
+                    if answer:
+
+                        return answer.strip()
+
+
+                return (
+                    "The language model returned an empty answer."
+                )
+
+
+            except Exception as exc:
+
+                raise RuntimeError(
+                    f"Groq API request failed.\n"
+                    f"Model: {self.model}\n"
+                    f"Error: {exc}"
+                ) from exc
+
+
+        # ========================================================
         # LOCAL MODEL
-        # -----------------------------------------
+        # ========================================================
 
         if self.mode == "local":
 
-            result = self.generator(
+            try:
 
-                prompt,
+                result = self.generator(
 
-                max_new_tokens=700,
+                    prompt,
 
-                do_sample=True,
+                    max_new_tokens=700,
 
-                temperature=0.7,
+                    do_sample=True,
 
-                top_p=0.9,
+                    temperature=0.7,
 
-                num_return_sequences=1
-            )
+                    top_p=0.9,
 
-            generated_text = result[0][
-                "generated_text"
-            ]
+                    num_return_sequences=1
+                )
 
-            # Remove prompt from generated result
-            if generated_text.startswith(prompt):
-
-                generated_text = generated_text[
-                    len(prompt):
+                generated_text = result[0][
+                    "generated_text"
                 ]
 
-            return generated_text.strip()
 
-        raise ValueError(
+                # ------------------------------------------------
+                # Remove prompt from generated result
+                # ------------------------------------------------
+
+                if generated_text.startswith(prompt):
+
+                    generated_text = generated_text[
+                        len(prompt):
+                    ]
+
+
+                return generated_text.strip()
+
+
+            except Exception as exc:
+
+                raise RuntimeError(
+                    f"Local LLM generation failed: {exc}"
+                ) from exc
+
+
+        # ========================================================
+        # NO LLM AVAILABLE
+        # ========================================================
+
+        raise RuntimeError(
             self.error or
-            "Unsupported LLM mode."
+            "No LLM is available. "
+            "Please configure GROQ_API_KEY."
         )
