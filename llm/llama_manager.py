@@ -1,30 +1,25 @@
 import os
-
+import streamlit as st
 from dotenv import load_dotenv
 
-# ============================================================
-# LOAD ENVIRONMENT VARIABLES
-# ============================================================
-
 load_dotenv()
-
 
 class LlamaManager:
 
     def __init__(self):
 
-        # ====================================================
-        # INITIAL STATE
-        # ====================================================
-
         self.api_key = os.getenv("GROQ_API_KEY")
+
+        if not self.api_key:
+            try:
+                self.api_key = st.secrets.get("GROQ_API_KEY")
+            except Exception:
+                self.api_key = None
 
         self.mode = None
         self.error = None
-
         self.client = None
         self.model = None
-
         self.tokenizer = None
         self.generator = None
 
