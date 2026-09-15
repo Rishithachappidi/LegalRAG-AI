@@ -1,4 +1,4 @@
-# ⚖️ LegalRAG-AI
+# LegalRAG-AI
 
 ### Intelligent Legal Document Analysis using Sentence-BERT, FAISS, DCBD and LLaMA
 
@@ -20,7 +20,7 @@ The core objective is to reduce irrelevant retrieval and unsupported ("hallucina
 
 ---
 
-## 📌 Table of Contents
+##  Table of Contents
 
 1. [Problem Statement](#-problem-statement)
 2. [Key Features](#-key-features)
@@ -45,7 +45,7 @@ The core objective is to reduce irrelevant retrieval and unsupported ("hallucina
 
 ---
 
-## 📖 Problem Statement
+##  Problem Statement
 
 Legal documents such as agreements, contracts, policies, and legal-service documents often contain a large number of clauses. Finding the correct information manually is time-consuming, and traditional keyword search fails when the user's wording differs from the document's wording.
 
@@ -61,7 +61,7 @@ A keyword search will often miss this connection. LegalRAG-AI uses semantic embe
 
 ---
 
-## ✨ Key Features
+##  Key Features
 
 - **Multi-document upload** — analyze and query several PDFs in a single session.
 - **Automatic clause segmentation** — splits documents on legal heading patterns (numbered clauses, `ARTICLE`, `SECTION`, `CLAUSE`).
@@ -76,7 +76,7 @@ A keyword search will often miss this connection. LegalRAG-AI uses semantic embe
 
 ---
 
-## 🏗 System Architecture
+##  System Architecture
 
 ```text
 Legal PDF
@@ -108,7 +108,7 @@ Faithfulness / Hallucination Evaluation
 
 ---
 
-## 🔄 Complete Workflow
+## Complete Workflow
 
 **Phase 1 — Knowledge base creation** (runs once per uploaded PDF, on clicking **Analyze Documents**):
 
@@ -129,7 +129,7 @@ Faithfulness / Hallucination Evaluation
 
 ---
 
-## 🧩 Detailed Methodology
+##  Detailed Methodology
 
 ### 1. PDF Extraction (`preprocessing/pdf_extractor.py`)
 Uses PyMuPDF (`fitz`) to read every page of the uploaded PDF and concatenate the extracted text. The raw text is cached to `extracted_text/<name>.txt`.
@@ -181,7 +181,7 @@ Embeds the full generated answer and the full selected-clause context with Sente
 
 ---
 
-## 🛠 Technology Stack
+##  Technology Stack
 
 | Layer | Technology |
 |---|---|
@@ -197,7 +197,7 @@ Embeds the full generated answer and the full selected-clause context with Sente
 
 ---
 
-## 📂 Project Structure
+##  Project Structure
 
 ```text
 LegalRAG-AI/
@@ -236,7 +236,7 @@ LegalRAG-AI/
 
 ---
 
-## 📋 Requirements
+##  Requirements
 
 - Python 3.9+ recommended
 - pip
@@ -260,7 +260,7 @@ python-dotenv
 
 ---
 
-## ⚙️ Installation
+##  Installation
 
 ```bash
 # 1. Clone the repository
@@ -277,7 +277,7 @@ pip install -r requirements.txt
 
 ---
 
-## 🔐 Environment Configuration
+##  Environment Configuration
 
 Create a `.env` file in the project root:
 
@@ -292,7 +292,7 @@ Get a free Groq API key at [console.groq.com](https://console.groq.com/). If you
 
 ---
 
-## ▶️ How to Run
+##  How to Run
 
 ```bash
 streamlit run app.py
@@ -302,23 +302,23 @@ This opens the app in your browser (by default at `http://localhost:8501`). On f
 
 ---
 
-## 📘 How to Use
+##  How to Use
 
 1. **Upload documents** — drag and drop one or more legal PDFs into the uploader.
-2. **Click "🚀 Analyze Documents"** — the app extracts text, chunks clauses, generates embeddings, and builds a FAISS index for each document (shown with progress/success messages and a preview of the first three clauses).
+2. **Click " Analyze Documents"** — the app extracts text, chunks clauses, generates embeddings, and builds a FAISS index for each document (shown with progress/success messages and a preview of the first three clauses).
 3. **Ask a question** — type a legal question about the uploaded documents in the "Ask a Legal Question" box.
-4. **Click "🔍 Search"** — the app:
+4. **Click "Search"** — the app:
    - retrieves and displays the top matching clauses with similarity scores,
    - runs DCBD to narrow down to the most relevant subset,
    - generates a structured legal analysis report,
    - displays faithfulness, hallucination risk, and answer-context similarity metrics.
-5. **Download the report** — use the "📥 Download Legal Report (.txt)" button to export the question, answer, and evaluation metrics.
+5. **Download the report** — use the " Download Legal Report (.txt)" button to export the question, answer, and evaluation metrics.
 
 If your question isn't related to the uploaded documents, the relevance validator will stop the pipeline before any LLM call and ask you to rephrase or upload the right document.
 
 ---
 
-## 📊 Evaluation Metrics
+##  Evaluation Metrics
 
 | Metric | Meaning |
 |---|---|
@@ -329,13 +329,13 @@ If your question isn't related to the uploaded documents, the relevance validato
 
 ---
 
-## 🎯 Why DCBD
+##  Why DCBD
 
 Fixed top-k retrieval has two failure modes: too few clauses for broad questions, or too many irrelevant clauses for narrow ones, which dilutes the LLM's context and increases hallucination risk. DCBD instead selects clauses based on how much of the *cumulative similarity mass* they cover (75% coverage, bounded between 3 and 6 clauses), so the amount of context adapts to how concentrated or spread out the relevant information actually is in the document.
 
 ---
 
-## ✅ Advantages
+##  Advantages
 
 - Retrieval is meaning-based, not keyword-based — differently worded questions can still match the right clause.
 - The LLM is explicitly constrained to the retrieved context, reducing fabricated legal claims.
@@ -343,14 +343,14 @@ Fixed top-k retrieval has two failure modes: too few clauses for broad questions
 - Works even without an LLM API key, via the local-model or clause-based fallback paths.
 - Per-document caching avoids redundant re-processing of the same PDF.
 
-## ⚠️ Limitations
+##  Limitations
 
 - Clause segmentation relies on regex heading patterns and may not perfectly split documents with unconventional formatting.
 - The local-model fallback (`distilgpt2` by default) produces much lower-quality analysis than the Groq-hosted LLaMA path.
 - Faithfulness scoring is an embedding-similarity proxy, not a verified fact-checking mechanism.
 - Not a substitute for professional legal advice (see [Disclaimer](#-disclaimer)).
 
-## 🚀 Future Enhancements
+##  Future Enhancements
 
 - Support for additional document formats (DOCX, scanned/OCR PDFs).
 - Persistent multi-user knowledge bases instead of session-scoped uploads.
@@ -359,7 +359,7 @@ Fixed top-k retrieval has two failure modes: too few clauses for broad questions
 
 ---
 
-## 🐛 Troubleshooting
+##  Troubleshooting
 
 | Issue | Fix |
 |---|---|
@@ -370,13 +370,10 @@ Fixed top-k retrieval has two failure modes: too few clauses for broad questions
 
 ---
 
-## ⚖️ Disclaimer
+##  Disclaimer
 
 LegalRAG-AI is a research/engineering project for retrieval-augmented legal document analysis. It is **not** a substitute for professional legal advice. Always consult a qualified lawyer for actual legal decisions.
 
 ---
 
-## 👤 Author
 
-**Y. Karthikeya**
-GitHub: [@yakkalakarthikeya](https://github.com/yakkalakarthikeya)
