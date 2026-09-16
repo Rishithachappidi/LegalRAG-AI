@@ -1,7 +1,6 @@
 # LegalRAG-AI
 
 ### Intelligent Legal Document Analysis using Sentence-BERT, FAISS, DCBD and LLaMA
-
 LegalRAG-AI is a Retrieval-Augmented Generation (RAG) system for legal documents. Upload one or more legal PDFs (contracts, agreements, policies), ask a question in plain English, and the system retrieves the most relevant clauses using semantic search and generates a structured, citation-grounded legal analysis using an LLM — with a built-in faithfulness/hallucination score for every answer.
 
 The system combines:
